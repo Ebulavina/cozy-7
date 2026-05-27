@@ -1,0 +1,46 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 48px 24px;
+  max-width: 360px;
+  margin: 0 auto;
+  min-height: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin-top: 12vh;
+}
+
+.title {
+  font-size: clamp(36px, 9vw, 56px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}

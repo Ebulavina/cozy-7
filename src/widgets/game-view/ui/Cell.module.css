@@ -1,0 +1,49 @@
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  border-radius: 14%;
+  background: var(--cell-bg, var(--surface));
+  box-shadow: var(--shadow-soft);
+  font-size: clamp(14px, 4.2vw, 22px);
+  font-weight: 600;
+  color: var(--text);
+  user-select: none;
+  transition:
+    transform var(--duration-short) var(--ease),
+    opacity var(--duration-long) var(--ease),
+    background var(--duration-short) var(--ease);
+  /* allow grid placement transition for "gravity" */
+  will-change: transform, opacity;
+}
+
+.glyph {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* colored types — pastel tints from tokens.css */
+.type1 { --cell-bg: var(--cell-1); }
+.type2 { --cell-bg: var(--cell-2); }
+.type3 { --cell-bg: var(--cell-3); }
+.type4 { --cell-bg: var(--cell-4); }
+.type5 { --cell-bg: var(--cell-5); }
+.type6 { --cell-bg: var(--cell-6); }
+.type7 { --cell-bg: var(--cell-7); }
+
+.gray {
+  --cell-bg: var(--cell-gray);
+}
+
+.black {
+  --cell-bg: var(--cell-black);
+  color: var(--bg);
+}
+
+/* applied when matched — see gameLoop.runGameProcess */
+.removing {
+  transform: scale(1.18);
+  opacity: 0;
+}

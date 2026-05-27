@@ -1,0 +1,14 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './app/styles/tokens.css';
+import './app/styles/reset.css';
+import App from './app/App';
+
+const root = document.getElementById('root');
+if (!root) throw new Error('#root element missing');
+
+createRoot(root).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
