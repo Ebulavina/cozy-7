@@ -6,6 +6,7 @@ import pkg from './package.json' with { type: 'json' };
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/cozy-7/',
   plugins: [react()],
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
