@@ -1,7 +1,9 @@
 /*
  * Design tokens.
  * Calm, Two Dots-inspired palette: clean backgrounds, soft but distinct cell
- * hues spanning the full colour wheel. Dark mode via prefers-color-scheme.
+ * hues spanning the full colour wheel.
+ * Dark mode: system default via prefers-color-scheme; manual override via
+ * [data-theme="dark"] / [data-theme="light"] on <html>.
  */
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -40,7 +42,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg:           #17161A;
     --surface:      #201E24;
     --border:       #2C2A30;
@@ -62,4 +64,27 @@
     --progress-empty: #2F2E2A;
     --progress-full:  #EDEAE3;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg:           #17161A;
+  --surface:      #201E24;
+  --border:       #2C2A30;
+  --text:         #ECE8E2;
+  --text-muted:   #8E8B86;
+  --accent:       #ECE8E2;
+
+  --cell-1: #C4514A; /* coral       */
+  --cell-2: #47AA82; /* mint        */
+  --cell-3: #5088C4; /* sky         */
+  --cell-4: #9E72AD; /* lilac       */
+  --cell-5: #C49840; /* honey       */
+  --cell-6: #3AACAA; /* teal        */
+  --cell-7: #B56C7E; /* dusty rose  */
+
+  --cell-gray:   #48453E;
+  --cell-black:  #0C0B0F;
+
+  --progress-empty: #2F2E2A;
+  --progress-full:  #EDEAE3;
 }

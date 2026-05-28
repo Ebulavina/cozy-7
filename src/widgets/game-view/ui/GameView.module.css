@@ -13,10 +13,34 @@
 .topNav {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .boardArea {
   position: relative;
   width: 100%;
+}
+
+.buttonTheme {
+  border-radius: 50%;
+  height: 24px;
+  width: 24px;
+  min-height: inherit;
+  font-size: 20px;
+}
+
+.buttonTheme:hover {
+  animation: fill-pop var(--duration-long) cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes fill-pop {
+  0% {
+    transform: rotate(0);
+  }
+  45% {
+    transform: rotate(-15deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
 }
