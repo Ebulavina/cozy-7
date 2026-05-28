@@ -16,10 +16,6 @@ export function Hud() {
   return (
     <header className={styles.hud}>
       <div className={styles.row}>
-        <div className={styles.scoreBlock}>
-          <span className={styles.label}>Score</span>
-          <span className={styles.score}>{score}</span>
-        </div>
         <div className={styles.nextBlock}>
           <span className={styles.label}>Next</span>
           <div
@@ -28,6 +24,10 @@ export function Hud() {
           >
             {nextLabel}
           </div>
+        </div>
+        <div className={styles.scoreBlock}>
+          <span className={styles.label}>Score</span>
+          <span className={styles.score}>{score}</span>
         </div>
       </div>
     </header>
