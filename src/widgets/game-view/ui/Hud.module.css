@@ -20,6 +20,13 @@
   align-items: flex-end;
 }
 
+.scoreWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .nextRow {
   display: flex;
   justify-content: center;
@@ -46,6 +53,32 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1;
+  animation: scorePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-block;
+}
+
+.delta {
+  position: absolute;
+  right: 0;
+  top: -4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+  pointer-events: none;
+  animation: floatUp 0.9s ease-out forwards;
+  white-space: nowrap;
+}
+
+@keyframes scorePop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
+@keyframes floatUp {
+  0%   { opacity: 1;   transform: translateY(0); }
+  20%  { opacity: 1;   transform: translateY(-6px); }
+  100% { opacity: 0;   transform: translateY(-32px); }
 }
 
 .next {
