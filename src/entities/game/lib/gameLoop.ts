@@ -43,22 +43,24 @@ export async function placeCellInColumn(column: number): Promise<void> {
   store.setNextType(randomCellType());
   store.syncFromLevel();
 
+  // Always increment immediately so StepBar fills on drop. On the last step
+  // before a shift, this fills the bar to 100%; it clears only after removal
+  // animations finish, right before the shift animation starts.
+  const shouldShift = store.stepsSinceShift + 1 >= store.stepsPerShift;
+  store.incrementStep();
+
   // Drop animation is handled in CSS via transform transition. We just wait
   // for the SHORT_MS so the rest of the loop runs after the cell lands.
   await sleep(TIMING.SHORT_MS);
 
   await runGameProcess();
 
-  // Step bookkeeping — threshold is dynamic (decreases with shiftCount).
-  const after = useGameStore.getState();
-  if (after.stepsSinceShift + 1 >= after.stepsPerShift) {
-    after.resetStep();
-    after.incrementShiftCount();
+  if (shouldShift) {
+    store.resetStep();
+    store.incrementShiftCount();
     await sleep(TIMING.LONG_MS);
     await runCreateNewLine();
     await runGameProcess();
-  } else {
-    after.incrementStep();
   }
 
   useGameStore.getState().setAnimating(false);
