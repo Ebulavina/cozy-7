@@ -7,26 +7,30 @@
   margin: 0 auto 20px;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: 4fr 3fr;
-  gap: 20px;
+.topRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
-.scoreBlock,
+.scoreBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.nextRow {
+  display: flex;
+  justify-content: center;
+}
+
+
 .nextBlock {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  justify-self: end;
-}
-
-.nextBlock {
   align-items: center;
-}
-
-.scoreBlock {
-  align-items: flex-end;
 }
 
 .label {

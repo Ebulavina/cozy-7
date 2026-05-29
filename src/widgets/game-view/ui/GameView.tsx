@@ -10,7 +10,6 @@ import { Board } from './Board';
 import { Hud } from './Hud';
 import { GameOverOverlay } from './GameOverOverlay';
 import { ScorePopups } from './ScorePopups';
-import { Button } from '@shared/ui/Button/Button';
 import { StepBar } from '@shared/ui/StepBar/StepBar';
 import styles from './GameView.module.css';
 
@@ -25,12 +24,7 @@ export function GameView({ onBack }: Props) {
   const { t } = useLocale();
   return (
     <main className={styles.view}>
-      <nav className={styles.topNav}>
-        <Button variant="ghost" onClick={onBack} aria-label={t.backToMenuBtn}>
-          {t.backToMenu}
-        </Button>
-      </nav>
-      <Hud />
+      <Hud onBack={onBack} />
       <div className={styles.boardArea}>
         <Board />
         <ScorePopups />
