@@ -5,6 +5,7 @@
  * GameOverOverlay appears when isGameOver flips true (Store.isGameOver).
  */
 import { useGameStore } from '@entities/game/model/gameStore';
+import { useLocale } from '@shared/lib/useLocale';
 import { Board } from './Board';
 import { Hud } from './Hud';
 import { GameOverOverlay } from './GameOverOverlay';
@@ -21,11 +22,12 @@ export function GameView({ onBack }: Props) {
   const isGameOver = useGameStore((s) => s.isGameOver);
   const stepsSinceShift = useGameStore((s) => s.stepsSinceShift);
   const stepsPerShift = useGameStore((s) => s.stepsPerShift);
+  const { t } = useLocale();
   return (
     <main className={styles.view}>
       <nav className={styles.topNav}>
-        <Button variant="ghost" onClick={onBack} aria-label="Back to menu">
-          ← Menu
+        <Button variant="ghost" onClick={onBack} aria-label={t.backToMenuBtn}>
+          {t.backToMenu}
         </Button>
       </nav>
       <Hud />
@@ -36,7 +38,7 @@ export function GameView({ onBack }: Props) {
       <StepBar
         value={stepsSinceShift}
         total={stepsPerShift}
-        ariaLabel="Moves until next bottom row"
+        ariaLabel={t.movesAriaLabel}
       />
       {isGameOver ? <GameOverOverlay onBackToMenu={onBack} /> : null}
     </main>
