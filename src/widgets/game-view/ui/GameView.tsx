@@ -5,7 +5,6 @@
  * GameOverOverlay appears when isGameOver flips true (Store.isGameOver).
  */
 import { useGameStore } from '@entities/game/model/gameStore';
-import { useTheme } from '@shared/lib/useTheme';
 import { Board } from './Board';
 import { Hud } from './Hud';
 import { GameOverOverlay } from './GameOverOverlay';
@@ -22,16 +21,11 @@ export function GameView({ onBack }: Props) {
   const isGameOver = useGameStore((s) => s.isGameOver);
   const stepsSinceShift = useGameStore((s) => s.stepsSinceShift);
   const stepsPerShift = useGameStore((s) => s.stepsPerShift);
-  const { theme, toggle } = useTheme();
-
   return (
     <main className={styles.view}>
       <nav className={styles.topNav}>
         <Button variant="ghost" onClick={onBack} aria-label="Back to menu">
           ← Menu
-        </Button>
-        <Button className={styles.buttonTheme} variant="ghost" onClick={toggle} aria-label="Toggle theme">
-          {theme === 'dark' ? '☀' : '☾'}
         </Button>
       </nav>
       <Hud />

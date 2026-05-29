@@ -5,6 +5,7 @@
  * comes from Vite's `import.meta.env`.
  */
 import { useGameStore } from '@entities/game/model/gameStore';
+import { useTheme } from '@shared/lib/useTheme';
 import { Button } from '@shared/ui/Button/Button';
 import { storage } from '@shared/lib/storage';
 import styles from './MainMenu.module.css';
@@ -18,6 +19,7 @@ const HAS_SAVE_KEY = 'gameState';
 export function MainMenu({ onStart }: Props) {
   const restore = useGameStore((s) => s.restoreSnapshot);
   const newGame = useGameStore((s) => s.newGame);
+  const { theme, toggle } = useTheme();
 
   const hasSave = storage.get(HAS_SAVE_KEY) != null;
 
@@ -33,7 +35,7 @@ export function MainMenu({ onStart }: Props) {
   return (
     <main className={styles.menu}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Combination</h1>
+        <h1 className={styles.title}>Cozy 7</h1>
         <p className={styles.subtitle}>A quiet 7×7 match puzzle</p>
       </header>
 
@@ -45,6 +47,10 @@ export function MainMenu({ onStart }: Props) {
       </div>
 
       <footer className={styles.footer}>
+        <Button className={styles.buttonTheme} variant="ghost" onClick={toggle}>
+          Toggle theme 
+          <span>{theme === 'dark' ? '☀' : '☾'}</span>
+        </Button>
         v{__APP_VERSION__}
       </footer>
     </main>
