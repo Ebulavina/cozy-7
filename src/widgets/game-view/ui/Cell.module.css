@@ -47,3 +47,19 @@
   transform: scale(1.18);
   opacity: 0;
 }
+
+@keyframes moveUp {
+  from {
+    /* calc(100% + 6px) = one full grid row (cell height + gap).
+       All cells start visually at their previous position and slide up. */
+    transform: translateY(calc(100% + 6px));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* applied to all cells while the board shifts up — see gameLoop.runCreateNewLine */
+.shiftingUp {
+  animation: moveUp var(--duration-short) var(--ease) both;
+}

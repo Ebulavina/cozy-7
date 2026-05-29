@@ -115,8 +115,12 @@ async function runCreateNewLine(): Promise<void> {
   }
 
   store.level.shiftUp();
-  store.syncFromLevel();
 
-  // small wait so the shift animation completes
+  // beginShiftUp atomically bumps boardVersion + sets isShiftingUp so React
+  // renders all cells at their new grid positions with the slide-up animation
+  // already applied (FLIP: they appear at their old positions and animate up).
+  store.beginShiftUp();
+
   await sleep(TIMING.SHORT_MS);
+  store.clearShiftUp();
 }

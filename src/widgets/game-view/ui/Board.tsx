@@ -14,6 +14,7 @@ import styles from './Board.module.css';
 export function Board() {
   const level = useGameStore((s) => s.level);
   const removingIds = useGameStore((s) => s.removingIds);
+  const isShiftingUp = useGameStore((s) => s.isShiftingUp);
   const isAnimating = useGameStore((s) => s.isAnimating);
   const isGameOver = useGameStore((s) => s.isGameOver);
   // boardVersion subscription forces re-render after mutations on Level
@@ -52,6 +53,7 @@ export function Board() {
             column={c.column}
             row={c.row}
             removing={removingIds.has(c.id)}
+            shiftingUp={isShiftingUp}
           />
         ))}
         {/* invisible column-wide hit areas */}

@@ -52,6 +52,8 @@ export interface GameStore {
   // UI animation state — kept here so the renderer can show transitions
   /** cells currently animating out (by id) */
   removingIds: ReadonlySet<string>;
+  /** true while the board is animating a new bottom row shifting everything up */
+  isShiftingUp: boolean;
   /** "+score" popups */
   popups: { id: string; column: number; row: number; score: number; x2: boolean }[];
   /** blocks user input while animations resolve */
@@ -64,6 +66,9 @@ export interface GameStore {
   setIsGameOver(value: boolean): void;
   setRemoving(ids: ReadonlySet<string>): void;
   clearRemoving(): void;
+  /** Set isShiftingUp and bump boardVersion atomically so the animation starts with updated positions. */
+  beginShiftUp(): void;
+  clearShiftUp(): void;
   applyMatchSideEffects(removed: RemovedCell[], iterMultiplier: number): void;
   popPopup(id: string): void;
   applyGravityMoves(_moves: CellMove[]): void;
@@ -92,6 +97,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   isGameOver: false,
 
   removingIds: new Set(),
+  isShiftingUp: false,
   popups: [],
   isAnimating: false,
   boardVersion: 0,
@@ -106,6 +112,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       stepsPerShift: STEPS_PER_SHIFT,
       isGameOver: false,
       removingIds: new Set(),
+      isShiftingUp: false,
       popups: [],
       isAnimating: false,
       boardVersion: get().boardVersion + 1,
@@ -123,6 +130,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   clearRemoving() {
     set({ removingIds: new Set() });
+  },
+
+  beginShiftUp() {
+    set({ isShiftingUp: true, boardVersion: get().boardVersion + 1 });
+  },
+
+  clearShiftUp() {
+    set({ isShiftingUp: false });
   },
 
   applyMatchSideEffects(removed, iterMultiplier) {
@@ -230,6 +245,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       stepsPerShift,
       isGameOver: snap.isGameOver ?? false,
       removingIds: new Set(),
+      isShiftingUp: false,
       popups: [],
       isAnimating: false,
       boardVersion: get().boardVersion + 1,
