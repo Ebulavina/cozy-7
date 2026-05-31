@@ -203,6 +203,16 @@ export class Level {
     return moves;
   }
 
+  /** Returns true when every cell in the grid is empty. */
+  isEmpty(): boolean {
+    for (let row = 0; row < BOARD.NUM_ROWS; row += 1) {
+      for (let column = 0; column < BOARD.NUM_COLUMNS; column += 1) {
+        if (this.grid.get(column, row) != null) return false;
+      }
+    }
+    return true;
+  }
+
   /** Port of `topLineIsEmpty()`. */
   topLineIsEmpty(): boolean {
     for (let column = 0; column < BOARD.NUM_COLUMNS; column += 1) {

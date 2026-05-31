@@ -10,7 +10,7 @@ export const BOARD = {
 } as const;
 
 /** Initial steps before a new bottom row pushes up. Decreases over the game. */
-export const STEPS_PER_SHIFT = 10;
+export const STEPS_PER_SHIFT = 18;
 /** Minimum steps per shift — the floor the difficulty can reach. */
 export const MIN_STEPS_PER_SHIFT = 5;
 /** After this many shifts the threshold drops by 1. */

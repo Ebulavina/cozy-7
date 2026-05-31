@@ -100,6 +100,12 @@ async function runGameProcess(): Promise<void> {
     store.applyGravityMoves(moves);
     await sleep(TIMING.SHORT_MS);
 
+    if (store.level.isEmpty()) {
+      useGameStore.getState().addBonusScore(777);
+      useGameStore.getState().pushToast('clearBoard');
+      return;
+    }
+
     iterationMultiplier *= 2;
   }
 }

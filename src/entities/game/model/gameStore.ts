@@ -25,7 +25,7 @@ import { storage } from '@shared/lib/storage';
 import { uid } from '@shared/lib/uid';
 
 export type ToastVariant = 'info';
-export type ToastKey = 'newLine';
+export type ToastKey = 'newLine' | 'clearBoard';
 
 export interface Toast {
   id: string;
@@ -95,6 +95,7 @@ export interface GameStore {
   bumpBoardVersion(): void;
   /** lower-level setter used by the game loop after each Level.* mutation. */
   syncFromLevel(): void;
+  addBonusScore(points: number): void;
   pushToast(key: ToastKey, variant?: ToastVariant): void;
   popToast(id: string): void;
 
@@ -219,6 +220,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   bumpBoardVersion() {
     set({ boardVersion: get().boardVersion + 1 });
+  },
+
+  addBonusScore(points) {
+    const newScore = get().score + points;
+    const newBest = Math.max(get().bestScore, newScore);
+    if (newBest > get().bestScore) {
+      storage.set<number>(BEST_SCORE_KEY, newBest);
+    }
+    set({ score: newScore, bestScore: newBest });
   },
 
   pushToast(key, variant = 'info') {
