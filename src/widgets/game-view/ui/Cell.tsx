@@ -18,6 +18,7 @@ interface Props {
   row: number;
   removing: boolean;
   shiftingUp: boolean;
+  placed: boolean;
 }
 
 function LockIcon() {
@@ -29,7 +30,7 @@ function LockIcon() {
   );
 }
 
-function CellInner({ type, column, row, removing, shiftingUp }: Props) {
+function CellInner({ type, column, row, removing, shiftingUp, placed }: Props) {
   // CSS-grid origin is top-left; iOS origin (and our model) is bottom-left.
   // Flip the row so row=0 appears at the bottom visually.
   const cssRow = BOARD.NUM_ROWS - row;
@@ -40,6 +41,7 @@ function CellInner({ type, column, row, removing, shiftingUp }: Props) {
     isColored(type) ? styles[`type${type}`] : styles[type],
     removing ? styles.removing : '',
     shiftingUp ? styles.shiftingUp : '',
+    placed ? styles.placed : '',
   ]
     .filter(Boolean)
     .join(' ');

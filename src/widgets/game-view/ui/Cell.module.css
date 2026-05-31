@@ -61,6 +61,15 @@
   opacity: 0;
 }
 
+.placed {
+  animation: popIn var(--duration-long) var(--ease) both;
+}
+
+@keyframes popIn {
+  from { transform: translateY(-200px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
 @keyframes moveUp {
   from {
     /* calc(100% + 6px) = one full grid row (cell height + gap).

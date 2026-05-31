@@ -4,7 +4,7 @@
  * Tapping a column (an invisible column-strip overlaying the grid) calls
  * `placeCellInColumn`, the web equivalent of `touchesBegan`.
  */
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import { BOARD } from '@shared/config/constants';
 import { useGameStore } from '@entities/game/model/gameStore';
 import { placeCellInColumn } from '@entities/game/lib/gameLoop';
@@ -20,6 +20,8 @@ export function Board() {
   // boardVersion subscription forces re-render after mutations on Level
   useGameStore((s) => s.boardVersion);
 
+  const prevCellIds = useRef<Set<string>>(new Set());
+
   // flatten the grid into a list of cells with their coordinates
   const cells = useMemo(() => {
     const out: { id: string; type: import('@entities/board/model/types').CellType; column: number; row: number }[] = [];
@@ -33,6 +35,18 @@ export function Board() {
     // intentionally include boardVersion via the store hook above
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [level, useGameStore.getState().boardVersion]);
+
+  // placedIds: newly appeared cells since last committed render.
+  // initialized guard prevents animating the initial board load.
+  const placedIds = useMemo(
+    () => new Set(cells.filter(c => !prevCellIds.current.has(c.id)).map(c => c.id)),
+    [cells],
+  );
+
+  // Update the "seen" set AFTER the DOM has committed (after Strict Mode double-invoke).
+  useLayoutEffect(() => {
+    cells.forEach(c => prevCellIds.current.add(c.id));
+  }, [cells]);
 
   const handleColumnClick = (column: number) => {
     if (isAnimating || isGameOver) return;
@@ -54,6 +68,7 @@ export function Board() {
             row={c.row}
             removing={removingIds.has(c.id)}
             shiftingUp={isShiftingUp}
+            placed={placedIds.has(c.id)}
           />
         ))}
         {/* invisible column-wide hit areas */}
