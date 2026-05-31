@@ -21,8 +21,15 @@
 .title {
   font-size: clamp(36px, 9vw, 56px);
   font-weight: 600;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.06em;
   line-height: 1;
+  animation: showText 3s;
+}
+
+@keyframes showText {
+  0%   { opacity: 0; transform: scale(0.8); letter-spacing: 1em }
+  20%  { opacity: 0; transform: scale(1.05); letter-spacing: 0.9em }
+  100% { transform: scale(1); letter-spacing: 0.06em }
 }
 
 .subtitle {

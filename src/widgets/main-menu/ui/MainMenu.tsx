@@ -37,7 +37,7 @@ export function MainMenu({ onStart }: Props) {
   return (
     <main className={styles.menu}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Cozy 7</h1>
+        <h1 className={styles.title}>Myriades</h1>
         <p className={styles.subtitle}>{t.subtitle}</p>
       </header>
 
