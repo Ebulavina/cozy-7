@@ -20,12 +20,12 @@
   --cell-2: #8ED4B2; /* mint        */
   --cell-3: #8FB8E0; /* sky         */
   --cell-4: #C5A3CC; /* lilac       */
-  --cell-5: #F5CA7E; /* honey       */
+  --cell-5: #FFCCCC; /* dusty rose  */
   --cell-6: #78CCC8; /* teal        */
-  --cell-7: #CDA0AC; /* dusty rose  */
+  --cell-7: #F5CA7E; /* honey       */
 
   --cell-gray:   #C4C1BA;
-  --cell-black:  #2A2825;
+  --cell-black:  #93928D;
 
   --progress-empty: #ECE9E3;
   --progress-full:  #C7C4BC;
@@ -78,12 +78,28 @@
   --cell-2: #47AA82; /* mint        */
   --cell-3: #5088C4; /* sky         */
   --cell-4: #9E72AD; /* lilac       */
-  --cell-5: #C49840; /* honey       */
+  --cell-5: #922c45; /* dusty rose  */
   --cell-6: #3AACAA; /* teal        */
-  --cell-7: #B56C7E; /* dusty rose  */
+  --cell-7: #C49840; /* honey       */
 
-  --cell-gray:   #48453E;
-  --cell-black:  #0C0B0F;
+  --cell-1: #E28E8E;
+  --cell-2: #C44040;
+  --cell-3: #267676;
+  --cell-4: #5CBBBB;
+  --cell-5: #72B572;
+  --cell-6: #8775C2;
+  --cell-7: #C49840; /* honey       */
+
+  --cell-1: #934949;
+  --cell-2: #C44040;
+  --cell-3: #7F1515;
+  --cell-4: #E27070;
+  --cell-5: #E28E8E;
+  --cell-6: #AA7A7A;
+  --cell-7: #932E2E; /* honey       */
+
+  --cell-gray:   #D1CDC5;
+  --cell-black:  #7A7771;
 
   --progress-empty: #2F2E2A;
   --progress-full:  #EDEAE3;

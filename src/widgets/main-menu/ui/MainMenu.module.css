@@ -23,6 +23,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   line-height: 1;
+  text-transform: uppercase;
   animation: showText 3s;
 }
 
