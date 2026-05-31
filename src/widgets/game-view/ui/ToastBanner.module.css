@@ -1,0 +1,25 @@
+.layer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  pointer-events: none;
+}
+
+.toast {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-muted);
+  /* background: var(--surface); */
+  padding: 6px 18px;
+  /* border-radius: 999px;
+  border: 1px solid var(--border); */
+  animation: pop 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pop {
+  0%   { opacity: 0; transform: scale(0.8); }
+  20%  { opacity: 1; transform: scale(1.05); }
+  60%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}

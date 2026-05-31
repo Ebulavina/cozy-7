@@ -100,7 +100,7 @@ async function runGameProcess(): Promise<void> {
     store.applyGravityMoves(moves);
     await sleep(TIMING.SHORT_MS);
 
-    iterationMultiplier += 1;
+    iterationMultiplier *= 2;
   }
 }
 
@@ -117,6 +117,7 @@ async function runCreateNewLine(): Promise<void> {
   }
 
   store.level.shiftUp();
+  store.pushToast('newLine');
 
   // beginShiftUp atomically bumps boardVersion + sets isShiftingUp so React
   // renders all cells at their new grid positions with the slide-up animation

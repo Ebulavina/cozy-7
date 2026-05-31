@@ -10,6 +10,7 @@ import { Board } from './Board';
 import { Hud } from './Hud';
 import { GameOverOverlay } from './GameOverOverlay';
 import { ScorePopups } from './ScorePopups';
+import { ToastBanner } from './ToastBanner';
 import { StepBar } from '@shared/ui/StepBar/StepBar';
 import styles from './GameView.module.css';
 
@@ -34,6 +35,7 @@ export function GameView({ onBack }: Props) {
         total={stepsPerShift}
         ariaLabel={t.movesAriaLabel}
       />
+      <ToastBanner />
       {isGameOver ? <GameOverOverlay onBackToMenu={onBack} /> : null}
     </main>
   );

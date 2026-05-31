@@ -22,6 +22,16 @@ import { randomCellType } from '@entities/board/lib/cellType';
 import { Grid } from '@entities/board/lib/grid';
 import { BOARD, STEPS_PER_SHIFT, MIN_STEPS_PER_SHIFT, SHIFTS_PER_STEP_REDUCTION } from '@shared/config/constants';
 import { storage } from '@shared/lib/storage';
+import { uid } from '@shared/lib/uid';
+
+export type ToastVariant = 'info';
+export type ToastKey = 'newLine';
+
+export interface Toast {
+  id: string;
+  key: ToastKey;
+  variant: ToastVariant;
+}
 
 const PERSIST_KEY = 'gameState';
 const BEST_SCORE_KEY = 'bestScore';
@@ -63,6 +73,9 @@ export interface GameStore {
   /** monotonic counter used to force-remount cells if needed */
   boardVersion: number;
 
+  /** screen-center banners (new line, combo, etc.) */
+  toasts: Toast[];
+
   // actions
   newGame(): void;
   setIsGameOver(value: boolean): void;
@@ -82,6 +95,8 @@ export interface GameStore {
   bumpBoardVersion(): void;
   /** lower-level setter used by the game loop after each Level.* mutation. */
   syncFromLevel(): void;
+  pushToast(key: ToastKey, variant?: ToastVariant): void;
+  popToast(id: string): void;
 
   // persistence
   saveSnapshot(): void;
@@ -102,6 +117,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   removingIds: new Set(),
   isShiftingUp: false,
   popups: [],
+  toasts: [],
   isAnimating: false,
   boardVersion: 0,
 
@@ -117,6 +133,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       removingIds: new Set(),
       isShiftingUp: false,
       popups: [],
+      toasts: [],
       isAnimating: false,
       boardVersion: get().boardVersion + 1,
     });
@@ -202,6 +219,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   bumpBoardVersion() {
     set({ boardVersion: get().boardVersion + 1 });
+  },
+
+  pushToast(key, variant = 'info') {
+    set({ toasts: [...get().toasts, { id: uid(), key, variant }] });
+  },
+
+  popToast(id) {
+    set({ toasts: get().toasts.filter((t) => t.id !== id) });
   },
 
   syncFromLevel() {
