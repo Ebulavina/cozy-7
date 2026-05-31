@@ -24,6 +24,7 @@ import { BOARD, STEPS_PER_SHIFT, MIN_STEPS_PER_SHIFT, SHIFTS_PER_STEP_REDUCTION 
 import { storage } from '@shared/lib/storage';
 
 const PERSIST_KEY = 'gameState';
+const BEST_SCORE_KEY = 'bestScore';
 
 interface PersistShape {
   cells: (Cell | null)[];
@@ -40,6 +41,7 @@ export interface GameStore {
 
   // session state (mirrors Store.swift)
   score: number;
+  bestScore: number;
   nextType: CellType;
   /** integer counter 0..stepsPerShift-1 */
   stepsSinceShift: number;
@@ -90,6 +92,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   level: new Level(),
 
   score: 0,
+  bestScore: storage.get<number>(BEST_SCORE_KEY) ?? 0,
   nextType: randomCellType(),
   stepsSinceShift: 0,
   shiftCount: 0,
@@ -154,7 +157,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
         x2: r.scoreMultiplier > 1,
       });
     }
-    set({ score: get().score + added, popups });
+    const newScore = get().score + added;
+    const newBest = Math.max(get().bestScore, newScore);
+    if (newBest > get().bestScore) {
+      storage.set<number>(BEST_SCORE_KEY, newBest);
+    }
+    set({ score: newScore, bestScore: newBest, popups });
   },
 
   popPopup(id) {

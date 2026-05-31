@@ -20,6 +20,7 @@ interface Delta {
 
 export function Hud({ onBack }: Props) {
   const score = useGameStore((s) => s.score);
+  const bestScore = useGameStore((s) => s.bestScore);
   const nextType = useGameStore((s) => s.nextType);
   const { t } = useLocale();
 
@@ -48,17 +49,23 @@ export function Hud({ onBack }: Props) {
         <Button variant="icon" onClick={onBack} aria-label={t.backToMenuBtn}>
           ☰
         </Button>
-        <div className={styles.scoreBlock}>
-          <span className={styles.label}>Score</span>
-          <div className={styles.scoreWrap}>
-            {deltas.map((d) => (
-              <span key={d.id} className={styles.delta}>
-                +{d.value}
+        <div className={styles.scores}>
+          <div className={styles.scoreBlock}>
+            <span className={styles.label}>{t.best}</span>
+            <span className={styles.score}>{bestScore}</span>
+          </div>
+          <div className={styles.scoreBlock}>
+            <span className={styles.label}>Score</span>
+            <div className={styles.scoreWrap}>
+              {deltas.map((d) => (
+                <span key={d.id} className={styles.delta}>
+                  +{d.value}
+                </span>
+              ))}
+              <span key={popKey} className={styles.score}>
+                {score}
               </span>
-            ))}
-            <span key={popKey} className={styles.score}>
-              {score}
-            </span>
+            </div>
           </div>
         </div>
       </div>
