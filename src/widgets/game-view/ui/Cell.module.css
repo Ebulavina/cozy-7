@@ -24,6 +24,18 @@
   letter-spacing: -0.02em;
 }
 
+.lock {
+  display: flex;
+  align-items: center;
+}
+
+.lockIcon {
+  width: clamp(10px, 3vw, 16px);
+  height: clamp(10px, 3vw, 16px);
+  color: currentColor;
+  opacity: 0.7;
+}
+
 /* colored types — pastel tints from tokens.css */
 .type1 { --cell-bg: var(--cell-1); }
 .type2 { --cell-bg: var(--cell-2); }
@@ -35,6 +47,7 @@
 
 .gray {
   --cell-bg: var(--cell-gray);
+  color: var(--bg);
 }
 
 .black {
