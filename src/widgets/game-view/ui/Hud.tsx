@@ -20,7 +20,6 @@ interface Delta {
 export function Hud({ onBack }: Props) {
   const score = useGameStore((s) => s.score);
   const bestScore = useGameStore((s) => s.bestScore);
-  const bestCombo = useGameStore((s) => s.bestCombo);
   const bestComboScore = useGameStore((s) => s.bestComboScore);
   const { t } = useLocale();
 
