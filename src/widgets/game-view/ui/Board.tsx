@@ -68,7 +68,7 @@ export function Board() {
             row={c.row}
             removing={removingIds.has(c.id)}
             shiftingUp={isShiftingUp}
-            placed={placedIds.has(c.id)}
+            placed={placedIds.size === 1 && placedIds.has(c.id)}
           />
         ))}
         {/* invisible column-wide hit areas */}
