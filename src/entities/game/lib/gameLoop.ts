@@ -53,14 +53,23 @@ export async function placeCellInColumn(column: number): Promise<void> {
   // for the SHORT_MS so the rest of the loop runs after the cell lands.
   await sleep(TIMING.SHORT_MS);
 
-  await runGameProcess();
+  const scoreBefore1 = useGameStore.getState().score;
+  const combo1 = await runGameProcess();
+  const comboScore1 = useGameStore.getState().score - scoreBefore1;
 
   if (shouldShift) {
     store.resetStep();
     store.incrementShiftCount();
     await sleep(TIMING.LONG_MS);
     await runCreateNewLine();
-    await runGameProcess();
+    const scoreBefore2 = useGameStore.getState().score;
+    const combo2 = await runGameProcess();
+    const comboScore2 = useGameStore.getState().score - scoreBefore2;
+    useGameStore.getState().updateBestCombo(Math.max(combo1, combo2));
+    useGameStore.getState().updateBestComboScore(Math.max(comboScore1, comboScore2));
+  } else {
+    useGameStore.getState().updateBestCombo(combo1);
+    useGameStore.getState().updateBestComboScore(comboScore1);
   }
 
   useGameStore.getState().setAnimating(false);
@@ -72,18 +81,19 @@ export async function placeCellInColumn(column: number): Promise<void> {
  * until none remain, applying gravity between passes and growing the
  * iteration multiplier on each non-empty pass.
  */
-async function runGameProcess(): Promise<void> {
+async function runGameProcess(): Promise<number> {
   let iterationMultiplier = 1;
+  let iterations = 0;
 
   for (;;) {
     const store = useGameStore.getState();
     const removed = store.level.checkMatches();
 
     if (removed.length === 0) {
-      // multiplier resets back to 1 between independent moves
-      return;
+      return iterations;
     }
 
+    iterations += 1;
     store.applyMatchSideEffects(removed, iterationMultiplier);
 
     // Mark sprites as removing → CSS plays the explode animation for LONG_MS.
@@ -103,7 +113,7 @@ async function runGameProcess(): Promise<void> {
     if (store.level.isEmpty()) {
       useGameStore.getState().addBonusScore(777);
       useGameStore.getState().pushToast('clearBoard');
-      return;
+      return iterations;
     }
 
     iterationMultiplier *= 2;

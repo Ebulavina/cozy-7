@@ -20,6 +20,8 @@ interface Delta {
 export function Hud({ onBack }: Props) {
   const score = useGameStore((s) => s.score);
   const bestScore = useGameStore((s) => s.bestScore);
+  const bestCombo = useGameStore((s) => s.bestCombo);
+  const bestComboScore = useGameStore((s) => s.bestComboScore);
   const { t } = useLocale();
 
   const prevScore = useRef(score);
@@ -48,6 +50,10 @@ export function Hud({ onBack }: Props) {
           <div className={styles.scoreBlock}>
             <span className={styles.label}>{t.best}</span>
             <span className={styles.score}>{bestScore}</span>
+          </div>
+          <div className={styles.scoreBlock}>
+            <span className={styles.label}>{t.bestComboScore}</span>
+            <span className={styles.score}>{bestComboScore}</span>
           </div>
           <div className={styles.scoreBlock}>
             <span className={styles.label}>Score</span>

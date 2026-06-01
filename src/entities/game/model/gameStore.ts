@@ -25,7 +25,7 @@ import { storage } from '@shared/lib/storage';
 import { uid } from '@shared/lib/uid';
 
 export type ToastVariant = 'info';
-export type ToastKey = 'newLine' | 'clearBoard';
+export type ToastKey = 'newLine' | 'clearBoard' | 'newComboRecord';
 
 export interface Toast {
   id: string;
@@ -35,6 +35,8 @@ export interface Toast {
 
 const PERSIST_KEY = 'gameState';
 const BEST_SCORE_KEY = 'bestScore';
+const BEST_COMBO_KEY = 'bestCombo';
+const BEST_COMBO_SCORE_KEY = 'bestComboScore';
 
 interface PersistShape {
   cells: (Cell | null)[];
@@ -52,6 +54,8 @@ export interface GameStore {
   // session state (mirrors Store.swift)
   score: number;
   bestScore: number;
+  bestCombo: number;
+  bestComboScore: number;
   nextType: CellType;
   /** integer counter 0..stepsPerShift-1 */
   stepsSinceShift: number;
@@ -98,6 +102,8 @@ export interface GameStore {
   addBonusScore(points: number): void;
   pushToast(key: ToastKey, variant?: ToastVariant): void;
   popToast(id: string): void;
+  updateBestCombo(combo: number): void;
+  updateBestComboScore(score: number): void;
 
   // persistence
   saveSnapshot(): void;
@@ -109,6 +115,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   score: 0,
   bestScore: storage.get<number>(BEST_SCORE_KEY) ?? 0,
+  bestCombo: storage.get<number>(BEST_COMBO_KEY) ?? 0,
+  bestComboScore: storage.get<number>(BEST_COMBO_SCORE_KEY) ?? 0,
   nextType: randomCellType(),
   stepsSinceShift: 0,
   shiftCount: 0,
@@ -237,6 +245,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   popToast(id) {
     set({ toasts: get().toasts.filter((t) => t.id !== id) });
+  },
+
+  updateBestCombo(combo) {
+    if (combo <= get().bestCombo) return;
+    storage.set<number>(BEST_COMBO_KEY, combo);
+    set({ bestCombo: combo });
+  },
+
+  updateBestComboScore(score) {
+    if (score <= get().bestComboScore) return;
+    storage.set<number>(BEST_COMBO_SCORE_KEY, score);
+    set({ bestComboScore: score });
+    get().pushToast('newComboRecord');
   },
 
   syncFromLevel() {
