@@ -17,6 +17,8 @@ export function Board() {
   const isShiftingUp = useGameStore((s) => s.isShiftingUp);
   const isAnimating = useGameStore((s) => s.isAnimating);
   const isGameOver = useGameStore((s) => s.isGameOver);
+  const nextType = useGameStore((s) => s.nextType);
+
   // boardVersion subscription forces re-render after mutations on Level
   useGameStore((s) => s.boardVersion);
 
@@ -55,6 +57,21 @@ export function Board() {
 
   return (
     <div className={styles.boardWrap} aria-label="Game board">
+      <div className={styles.nextRow}>
+        <div className={styles.nextBlock}>
+          <span className={styles.label}>Next</span>
+          <div className={styles.nextPreview}>
+            <Cell
+              type={nextType}
+              column={0}
+              row={0}
+              removing={false}
+              shiftingUp={false}
+              placed={false}
+            />
+          </div>
+        </div>
+      </div>
       <div className={styles.grid}>
         {/* background grid lines */}
         {Array.from({ length: BOARD.NUM_COLUMNS * BOARD.NUM_ROWS - cells.length }).map((_, i) => (

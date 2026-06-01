@@ -45,9 +45,42 @@
 }
 
 .columnHit:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--accent) 1%, transparent);
+  background: color-mix(in oklab, var(--text-muted) 3%, transparent);
 }
 
 .columnHit:disabled {
   cursor: default;
+}
+
+.nextRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.nextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nextPreview {
+  width: 44px;
+  height: 44px;
+}
+
+@media (min-width: 768px) {
+  .nextPreview {
+    width: 56px;
+    height: 56px;
+  }
 }

@@ -4,7 +4,6 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '@entities/game/model/gameStore';
-import { isColored } from '@entities/board/model/types';
 import { useLocale } from '@shared/lib/useLocale';
 import { Button } from '@shared/ui/Button/Button';
 import styles from './Hud.module.css';
@@ -21,7 +20,6 @@ interface Delta {
 export function Hud({ onBack }: Props) {
   const score = useGameStore((s) => s.score);
   const bestScore = useGameStore((s) => s.bestScore);
-  const nextType = useGameStore((s) => s.nextType);
   const { t } = useLocale();
 
   const prevScore = useRef(score);
@@ -39,9 +37,6 @@ export function Hud({ onBack }: Props) {
     }
     prevScore.current = score;
   }, [score]);
-
-  const nextLabel = isColored(nextType) ? String(nextType) : '';
-  const nextClass = isColored(nextType) ? `type${nextType}` : nextType;
 
   return (
     <header className={styles.hud}>
@@ -66,17 +61,6 @@ export function Hud({ onBack }: Props) {
                 {score}
               </span>
             </div>
-          </div>
-        </div>
-      </div>
-      <div className={styles.nextRow}>
-        <div className={styles.nextBlock}>
-          <span className={styles.label}>Next</span>
-          <div
-            className={`${styles.next} ${styles[nextClass]}`}
-            aria-label={`Next piece: ${String(nextType)}`}
-          >
-            {nextLabel}
           </div>
         </div>
       </div>
