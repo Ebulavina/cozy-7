@@ -4,7 +4,7 @@
   gap: 16px;
   width: 100%;
   max-width: 480px;
-  margin: 0 auto 20px;
+  margin: 0 auto 40px;
 }
 
 .topRow {
@@ -74,3 +74,8 @@
   100% { opacity: 0;   transform: translateY(-32px); }
 }
 
+@media (min-width: 768px) {
+  .hud {
+    margin: 0 auto 8px;
+  }
+}
