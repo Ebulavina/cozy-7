@@ -19,6 +19,7 @@ const translations = {
     gameOver: 'Game over',
     playAgain: 'Play again',
     backToMenuBtn: 'Back to menu',
+    newRecord: 'New record'
   },
   ru: {
     newGame: 'Новая игра',
@@ -34,6 +35,7 @@ const translations = {
     gameOver: 'Игра окончена',
     playAgain: 'Ещё раз',
     backToMenuBtn: 'В меню',
+    newRecord: 'Новый рекорд'
   },
 } satisfies Record<Locale, Record<string, string>>;
 

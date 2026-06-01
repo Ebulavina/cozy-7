@@ -14,12 +14,16 @@ interface Props {
 export function GameOverOverlay({ onBackToMenu }: Props) {
   const score = useGameStore((s) => s.score);
   const newGame = useGameStore((s) => s.newGame);
+  const bestScore = useGameStore((s) => s.bestScore);
   const { t } = useLocale();
 
   return (
     <div className={styles.overlay} role="alertdialog" aria-label={t.gameOver}>
       <div className={styles.card}>
-        <span className={styles.label}>{t.gameOver}</span>
+        <span className={styles.label}>
+          {bestScore < score ? t.newRecord : t.gameOver}
+          {bestScore < score && <div className={styles.newRecord}>🎉</div>}
+        </span>
         <span className={styles.score}>{score}</span>
         <div className={styles.actions}>
           <Button variant="primary" onClick={newGame}>{t.playAgain}</Button>
