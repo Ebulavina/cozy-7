@@ -25,12 +25,13 @@ import { storage } from '@shared/lib/storage';
 import { uid } from '@shared/lib/uid';
 
 export type ToastVariant = 'info';
-export type ToastKey = 'newLine' | 'clearBoard' | 'newComboRecord';
+export type ToastKey = 'newLine' | 'clearBoard' | 'newComboRecord' | 'comboScore';
 
 export interface Toast {
   id: string;
   key: ToastKey;
   variant: ToastVariant;
+  value?: number;
 }
 
 const PERSIST_KEY = 'gameState';
@@ -56,6 +57,8 @@ export interface GameStore {
   bestScore: number;
   bestCombo: number;
   bestComboScore: number;
+  /** live combo score for the current move — resets on each drop, not persisted */
+  currentComboScore: number;
   nextType: CellType;
   /** integer counter 0..stepsPerShift-1 */
   stepsSinceShift: number;
@@ -102,8 +105,10 @@ export interface GameStore {
   addBonusScore(points: number): void;
   pushToast(key: ToastKey, variant?: ToastVariant): void;
   popToast(id: string): void;
+  setComboToast(score: number): void;
   updateBestCombo(combo: number): void;
   updateBestComboScore(score: number): void;
+  resetCurrentComboScore(): void;
 
   // persistence
   saveSnapshot(): void;
@@ -117,6 +122,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   bestScore: storage.get<number>(BEST_SCORE_KEY) ?? 0,
   bestCombo: storage.get<number>(BEST_COMBO_KEY) ?? 0,
   bestComboScore: storage.get<number>(BEST_COMBO_SCORE_KEY) ?? 0,
+  currentComboScore: 0,
   nextType: randomCellType(),
   stepsSinceShift: 0,
   shiftCount: 0,
@@ -188,7 +194,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (newBest > get().bestScore) {
       storage.set<number>(BEST_SCORE_KEY, newBest);
     }
-    set({ score: newScore, bestScore: newBest, popups });
+    const newCurrentComboScore = get().currentComboScore + added;
+    set({ score: newScore, bestScore: newBest, popups, currentComboScore: newCurrentComboScore });
+    get().setComboToast(newCurrentComboScore);
   },
 
   popPopup(id) {
@@ -258,6 +266,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
     storage.set<number>(BEST_COMBO_SCORE_KEY, score);
     set({ bestComboScore: score });
     get().pushToast('newComboRecord');
+  },
+
+  resetCurrentComboScore() {
+    set({
+      currentComboScore: 0,
+      toasts: get().toasts.filter((t) => t.key !== 'comboScore'),
+    });
+  },
+
+  setComboToast(score) {
+    const filtered = get().toasts.filter((t) => t.key !== 'comboScore');
+    set({ toasts: [...filtered, { id: uid(), key: 'comboScore', variant: 'info', value: score }] });
   },
 
   syncFromLevel() {

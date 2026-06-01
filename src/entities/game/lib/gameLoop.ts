@@ -41,6 +41,7 @@ export async function placeCellInColumn(column: number): Promise<void> {
 
   store.setAnimating(true);
   store.setNextType(randomCellType());
+  store.resetCurrentComboScore();
   store.syncFromLevel();
 
   // Always increment immediately so StepBar fills on drop. On the last step

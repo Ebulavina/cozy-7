@@ -16,7 +16,7 @@ export function ToastBanner() {
           data-variant={toast.variant}
           onAnimationEnd={() => popToast(toast.id)}
         >
-          {t[toast.key]}
+          {t[toast.key]}{toast.value !== undefined ? ` +${toast.value}` : ''}
         </span>
       ))}
     </div>
