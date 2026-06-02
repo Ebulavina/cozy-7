@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
-  border-radius: 14%;
+  border-radius: 7%;
   background: var(--cell-bg, var(--surface));
   box-shadow: var(--shadow-soft);
   font-size: clamp(14px, 4.2vw, 22px);

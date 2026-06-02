@@ -7,9 +7,11 @@ export function ToastBanner() {
   const popToast = useGameStore((s) => s.popToast);
   const { t } = useLocale();
 
+  const toast = toasts[toasts.length - 1];
+
   return (
     <div className={styles.layer} aria-live="polite" aria-atomic="true">
-      {toasts.map((toast) => (
+      {toast && (
         <span
           key={toast.id}
           className={styles.toast}
@@ -18,7 +20,7 @@ export function ToastBanner() {
         >
           {t[toast.key]}{toast.value !== undefined ? ` +${toast.value}` : ''}
         </span>
-      ))}
+      )}
     </div>
   );
 }
