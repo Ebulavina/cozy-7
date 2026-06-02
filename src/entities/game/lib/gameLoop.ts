@@ -54,23 +54,22 @@ export async function placeCellInColumn(column: number): Promise<void> {
   // for the SHORT_MS so the rest of the loop runs after the cell lands.
   await sleep(TIMING.SHORT_MS);
 
-  const scoreBefore1 = useGameStore.getState().score;
-  const combo1 = await runGameProcess();
-  const comboScore1 = useGameStore.getState().score - scoreBefore1;
+  const scoreBefore = useGameStore.getState().score;
+  const result1 = await runGameProcess();
 
   if (shouldShift) {
     store.resetStep();
     store.incrementShiftCount();
     await sleep(TIMING.LONG_MS);
     await runCreateNewLine();
-    const scoreBefore2 = useGameStore.getState().score;
-    const combo2 = await runGameProcess();
-    const comboScore2 = useGameStore.getState().score - scoreBefore2;
-    useGameStore.getState().updateBestCombo(Math.max(combo1, combo2));
-    useGameStore.getState().updateBestComboScore(Math.max(comboScore1, comboScore2));
+    // Continue combo chain: pass multiplier and iteration count so the wave
+    // counter and score multiplier keep growing across the new line.
+    const result2 = await runGameProcess(result1.nextMultiplier, result1.iterations);
+    useGameStore.getState().updateBestCombo(result2.iterations);
+    useGameStore.getState().updateBestComboScore(useGameStore.getState().score - scoreBefore);
   } else {
-    useGameStore.getState().updateBestCombo(combo1);
-    useGameStore.getState().updateBestComboScore(comboScore1);
+    useGameStore.getState().updateBestCombo(result1.iterations);
+    useGameStore.getState().updateBestComboScore(useGameStore.getState().score - scoreBefore);
   }
 
   useGameStore.getState().setAnimating(false);
@@ -82,16 +81,19 @@ export async function placeCellInColumn(column: number): Promise<void> {
  * until none remain, applying gravity between passes and growing the
  * iteration multiplier on each non-empty pass.
  */
-async function runGameProcess(): Promise<number> {
-  let iterationMultiplier = 1;
-  let iterations = 0;
+async function runGameProcess(
+  startMultiplier = 1,
+  startIterations = 0,
+): Promise<{ iterations: number; nextMultiplier: number }> {
+  let iterationMultiplier = startMultiplier;
+  let iterations = startIterations;
 
   for (;;) {
     const store = useGameStore.getState();
     const removed = store.level.checkMatches();
 
     if (removed.length === 0) {
-      return iterations;
+      return { iterations, nextMultiplier: iterationMultiplier };
     }
 
     iterations += 1;
@@ -119,7 +121,7 @@ async function runGameProcess(): Promise<number> {
     if (store.level.isEmpty()) {
       useGameStore.getState().addBonusScore(777);
       useGameStore.getState().pushToast('clearBoard');
-      return iterations;
+      return { iterations, nextMultiplier: iterationMultiplier * 2 };
     }
 
     iterationMultiplier *= 2;
