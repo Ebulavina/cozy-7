@@ -116,7 +116,6 @@ export class Level {
             scoreMultiplier: 1,
           });
           this.grid.set(column, row, null);
-          this.applyNeighbourEffects(column, row);
         }
       }
     }
@@ -139,12 +138,18 @@ export class Level {
             });
           }
           this.grid.set(column, row, null);
-          this.applyNeighbourEffects(column, row);
         }
       }
     }
 
     return removed;
+  }
+
+  /** Reveals hidden blocks adjacent to all removed cells. Call after the pop animation. */
+  applyNeighbourEffectsForRemoved(removed: RemovedCell[]): void {
+    for (const r of removed) {
+      this.applyNeighbourEffects(r.column, r.row);
+    }
   }
 
   /**
