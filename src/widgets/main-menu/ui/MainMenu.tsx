@@ -4,11 +4,13 @@
  * Two actions: Resume (restore from localStorage) and New Game. App version
  * comes from Vite's `import.meta.env`.
  */
+import { useState } from 'react';
 import { useGameStore } from '@entities/game/model/gameStore';
 import { useTheme } from '@shared/lib/useTheme';
 import { useLocale } from '@shared/lib/useLocale';
 import { Button } from '@shared/ui/Button/Button';
 import { storage } from '@shared/lib/storage';
+import { StatisticsModal } from './StatisticsModal';
 import styles from './MainMenu.module.css';
 
 interface Props {
@@ -22,6 +24,7 @@ export function MainMenu({ onStart }: Props) {
   const newGame = useGameStore((s) => s.newGame);
   const { theme, toggle } = useTheme();
   const { t, toggleLocale } = useLocale();
+  const [showStats, setShowStats] = useState(false);
 
   const hasSave = storage.get(HAS_SAVE_KEY) != null;
 
@@ -38,7 +41,7 @@ export function MainMenu({ onStart }: Props) {
     <main className={styles.menu}>
       <header className={styles.header}>
         <h1 className={styles.title}>Myriades</h1>
-        <p className={styles.subtitle}>{t.subtitle}</p>
+        <p className={styles.subtitle}>{t.subtitle} v{__APP_VERSION__}</p>
       </header>
 
       <div className={styles.actions}>
@@ -46,6 +49,7 @@ export function MainMenu({ onStart }: Props) {
         <Button variant="ghost" onClick={handleResume} disabled={!hasSave}>
           {hasSave ? t.resume : t.noSave}
         </Button>
+        <Button variant="ghost" onClick={() => setShowStats(true)}>{t.statistics}</Button>
       </div>
 
       <footer className={styles.footer}>
@@ -54,8 +58,8 @@ export function MainMenu({ onStart }: Props) {
           <span>{theme === 'dark' ? '☀' : '☾'}</span>
         </Button>
         <Button variant="ghost" onClick={toggleLocale}>{t.toggleLocale}</Button>
-        v{__APP_VERSION__}
       </footer>
+      {showStats && <StatisticsModal onClose={() => setShowStats(false)} />}
     </main>
   );
 }

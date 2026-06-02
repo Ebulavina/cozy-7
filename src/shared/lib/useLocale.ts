@@ -11,7 +11,7 @@ const translations = {
     noSave: 'No saved game',
     toggleTheme: 'Toggle theme',
     toggleLocale: 'Русский',
-    subtitle: 'A quiet 7×7 match puzzle',
+    subtitle: 'A quiet 7×7 match puzzle.',
     best: 'Best',
     bestCombo: 'Combo',
     bestComboScore: 'Combo',
@@ -23,7 +23,12 @@ const translations = {
     gameOver: 'Game over',
     playAgain: 'Play again',
     backToMenuBtn: 'Back to menu',
-    newRecord: 'New record'
+    newRecord: 'New record',
+    statistics: 'Statistics',
+    statBestScore: 'Best score',
+    statBestCombo: 'Best combo',
+    statBestComboScore: 'Best combo score',
+    close: 'Close',
   },
   ru: {
     newGame: 'Новая игра',
@@ -31,7 +36,7 @@ const translations = {
     noSave: 'Нет сохранения',
     toggleTheme: 'Сменить тему',
     toggleLocale: 'English',
-    subtitle: 'A quiet 7×7 match puzzle',
+    subtitle: 'A quiet 7×7 match puzzle.',
     best: 'Рекорд',
     bestCombo: 'Комбо',
     bestComboScore: 'Комбо',
@@ -43,7 +48,12 @@ const translations = {
     gameOver: 'Игра окончена',
     playAgain: 'Ещё раз',
     backToMenuBtn: 'В меню',
-    newRecord: 'Новый рекорд'
+    newRecord: 'Новый рекорд',
+    statistics: 'Статистика',
+    statBestScore: 'Лучший счёт',
+    statBestCombo: 'Лучшее комбо',
+    statBestComboScore: 'Лучший счёт за комбо',
+    close: 'Закрыть',
   },
 } satisfies Record<Locale, Record<string, string>>;
 
