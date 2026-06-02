@@ -104,14 +104,13 @@ async function runGameProcess(
     store.setRemoving(removingIds);
     store.syncFromLevel();
 
-    await sleep(TIMING.LONG_MS);
+    await sleep(TIMING.LONG_MS * 0.3);
 
     store.clearRemoving();
-
-    // Reveal hidden blocks only after the explosion animation — so the player
-    // can see the newly revealed value before it potentially matches next wave.
     store.level.applyNeighbourEffectsForRemoved(removed);
     store.syncFromLevel();
+
+    await sleep(TIMING.LONG_MS * 0.7);
 
     // Apply gravity then animate (SHORT_MS).
     const moves = store.level.applyGravity();
