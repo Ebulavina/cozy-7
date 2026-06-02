@@ -24,33 +24,6 @@
   opacity: 0.35;
 }
 
-.columns {
-  position: absolute;
-  inset: 10px;
-  bottom: -120px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-  pointer-events: none;
-}
-
-.columnHit {
-  pointer-events: auto;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  border-radius: var(--radius-md);
-  transition: background var(--duration-short) var(--ease);
-  cursor: pointer;
-}
-
-.columnHit:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--text-muted) 3%, transparent);
-}
-
-.columnHit:disabled {
-  cursor: default;
-}
 
 .nextRow {
   display: flex;

@@ -1,10 +1,10 @@
 /**
  * Board — 7×7 CSS-grid that renders Cells from gameStore.level.grid.
  *
- * Tapping a column (an invisible column-strip overlaying the grid) calls
- * `placeCellInColumn`, the web equivalent of `touchesBegan`.
+ * Clicking anywhere on the grid calculates the target column from the click's
+ * X position and calls `placeCellInColumn`, the web equivalent of `touchesBegan`.
  */
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import { BOARD } from '@shared/config/constants';
 import { useGameStore } from '@entities/game/model/gameStore';
 import { placeCellInColumn } from '@entities/game/lib/gameLoop';
@@ -50,8 +50,13 @@ export function Board() {
     cells.forEach(c => prevCellIds.current.add(c.id));
   }, [cells]);
 
-  const handleColumnClick = (column: number) => {
+  const handleGridClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isAnimating || isGameOver) return;
+    const { left, width } = e.currentTarget.getBoundingClientRect();
+    const column = Math.min(
+      BOARD.NUM_COLUMNS - 1,
+      Math.floor(((e.clientX - left) / width) * BOARD.NUM_COLUMNS),
+    );
     void placeCellInColumn(column);
   };
 
@@ -72,7 +77,11 @@ export function Board() {
           </div>
         </div>
       </div>
-      <div className={styles.grid}>
+      <div
+        className={styles.grid}
+        onClick={handleGridClick}
+        style={{ cursor: isAnimating || isGameOver ? 'default' : 'pointer' }}
+      >
         {/* background grid lines */}
         {Array.from({ length: BOARD.NUM_COLUMNS * BOARD.NUM_ROWS - cells.length }).map((_, i) => (
           <div key={`bg-${i}`} className={styles.slot} />
@@ -88,19 +97,6 @@ export function Board() {
             placed={placedIds.size === 1 && placedIds.has(c.id)}
           />
         ))}
-        {/* invisible column-wide hit areas */}
-        <div className={styles.columns}>
-          {Array.from({ length: BOARD.NUM_COLUMNS }).map((_, c) => (
-            <button
-              key={`col-${c}`}
-              className={styles.columnHit}
-              onClick={() => handleColumnClick(c)}
-              aria-label={`Drop into column ${c + 1}`}
-              disabled={isAnimating || isGameOver}
-              type="button"
-            />
-          ))}
-        </div>
       </div>
     </div>
   );
