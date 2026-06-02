@@ -7,7 +7,7 @@ export function ToastBanner() {
   const popToast = useGameStore((s) => s.popToast);
   const { t } = useLocale();
 
-  const toast = toasts[toasts.length - 1];
+  const toast = toasts[0];
 
   return (
     <div className={styles.layer} aria-live="polite" aria-atomic="true">
