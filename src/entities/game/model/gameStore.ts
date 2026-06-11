@@ -103,7 +103,7 @@ export interface GameStore {
   /** lower-level setter used by the game loop after each Level.* mutation. */
   syncFromLevel(): void;
   addBonusScore(points: number): void;
-  pushToast(key: ToastKey, variant?: ToastVariant): void;
+  pushToast(key: ToastKey, variant?: ToastVariant, value?: number): void;
   popToast(id: string): void;
   setComboToast(score: number): void;
   updateBestCombo(combo: number): void;
@@ -247,8 +247,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ score: newScore, bestScore: newBest });
   },
 
-  pushToast(key, variant = 'info') {
-    set({ toasts: [...get().toasts, { id: uid(), key, variant }] });
+  pushToast(key, variant = 'info', value?: number) {
+    set({ toasts: [...get().toasts, { id: uid(), key, variant, value }] });
   },
 
   popToast(id) {
@@ -265,7 +265,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (score <= get().bestComboScore) return;
     storage.set<number>(BEST_COMBO_SCORE_KEY, score);
     set({ bestComboScore: score });
-    get().pushToast('newComboRecord');
+    get().pushToast('newComboRecord', 'info', score);
   },
 
   resetCurrentComboScore() {
