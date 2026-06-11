@@ -5,7 +5,7 @@ import styles from './ToastBanner.module.css';
 export function ToastBanner() {
   const toasts = useGameStore((s) => s.toasts);
   const popToast = useGameStore((s) => s.popToast);
-  const { t } = useLocale();
+  const { t, formatNumber } = useLocale();
 
   const toast = toasts[0];
 
@@ -18,7 +18,7 @@ export function ToastBanner() {
           data-variant={toast.variant}
           onAnimationEnd={() => popToast(toast.id)}
         >
-          {t[toast.key]}{toast.value !== undefined ? ` +${toast.value}` : ''}
+          {t[toast.key]}{toast.value !== undefined ? ` +${formatNumber(toast.value)}` : ''}
         </span>
       )}
     </div>

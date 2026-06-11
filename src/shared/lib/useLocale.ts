@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 type Locale = 'en' | 'ru';
 
@@ -70,5 +70,12 @@ export function useLocale() {
     });
   }, []);
 
-  return { t: translations[locale], locale, toggleLocale };
+  const fmt = useMemo(
+    () => new Intl.NumberFormat('ru-RU'),
+    [],
+  );
+
+  const formatNumber = useCallback((n: number) => fmt.format(n), [fmt]);
+
+  return { t: translations[locale], locale, toggleLocale, formatNumber };
 }

@@ -21,7 +21,7 @@ export function Hud({ onBack }: Props) {
   const score = useGameStore((s) => s.score);
   // const bestScore = useGameStore((s) => s.bestScore);
   // const bestComboScore = useGameStore((s) => s.bestComboScore);
-  const { t } = useLocale();
+  const { t, formatNumber } = useLocale();
 
   const prevScore = useRef(score);
   const [popKey, setPopKey] = useState(0);
@@ -59,11 +59,11 @@ export function Hud({ onBack }: Props) {
             <div className={styles.scoreWrap}>
               {deltas.map((d) => (
                 <span key={d.id} className={styles.delta}>
-                  +{d.value}
+                  +{formatNumber(d.value)}
                 </span>
               ))}
               <span key={popKey} className={styles.score}>
-                {score}
+                {formatNumber(score)}
               </span>
             </div>
           </div>

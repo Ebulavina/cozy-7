@@ -12,7 +12,7 @@ export function StatisticsModal({ onClose }: Props) {
   const bestScore = useGameStore((s) => s.bestScore);
   const bestCombo = useGameStore((s) => s.bestCombo);
   const bestComboScore = useGameStore((s) => s.bestComboScore);
-  const { t } = useLocale();
+  const { t, formatNumber } = useLocale();
 
   return (
     <Modal aria-label={t.statistics}>
@@ -20,15 +20,15 @@ export function StatisticsModal({ onClose }: Props) {
       <div className={styles.rows}>
         <div className={styles.row}>
           <span className={styles.title}>{t.statBestScore}</span>
-          <span className={styles.rowValue}>{bestScore}</span>
+          <span className={styles.rowValue}>{formatNumber(bestScore)}</span>
         </div>
         <div className={styles.row}>
           <span className={styles.title}>{t.statBestComboScore}</span>
-          <span className={styles.rowValue}>{bestComboScore}</span>
+          <span className={styles.rowValue}>{formatNumber(bestComboScore)}</span>
         </div>
         <div className={styles.row}>
           <span className={styles.title}>{t.statBestCombo}</span>
-          <span className={styles.rowValue}>{bestCombo}</span>
+          <span className={styles.rowValue}>{formatNumber(bestCombo)}</span>
         </div>
       </div>
       <div className={styles.actions}>
