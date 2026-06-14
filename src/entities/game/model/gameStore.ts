@@ -49,6 +49,8 @@ interface PersistShape {
   removeBonusCount: number;
   removeRowBonusCount: number;
   shuffleBonusCount: number;
+  removeTypeBonusCount: number;
+  removeColBonusCount: number;
 }
 
 export interface GameStore {
@@ -126,6 +128,16 @@ export interface GameStore {
   shuffleBonusCount: number;
   consumeShuffleBonus(): void;
 
+  removeTypeBonusCount: number;
+  isRemoveTypeMode: boolean;
+  toggleRemoveTypeMode(): void;
+  consumeRemoveTypeBonus(): void;
+
+  removeColBonusCount: number;
+  isRemoveColMode: boolean;
+  toggleRemoveColMode(): void;
+  consumeRemoveColBonus(): void;
+
   // persistence
   saveSnapshot(): void;
   restoreSnapshot(): boolean;
@@ -156,6 +168,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   removeRowBonusCount: 2,
   isRemoveRowMode: false,
   shuffleBonusCount: 1,
+  removeTypeBonusCount: 2,
+  isRemoveTypeMode: false,
+  removeColBonusCount: 2,
+  isRemoveColMode: false,
 
   newGame() {
     set({
@@ -177,6 +193,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       removeRowBonusCount: 2,
       isRemoveRowMode: false,
       shuffleBonusCount: 1,
+      removeTypeBonusCount: 2,
+      isRemoveTypeMode: false,
+      removeColBonusCount: 2,
+      isRemoveColMode: false,
     });
     storage.remove(PERSIST_KEY);
   },
@@ -313,7 +333,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleRemoveMode() {
     const { isRemoveMode, removeBonusCount } = get();
     if (!isRemoveMode && removeBonusCount === 0) return;
-    set({ isRemoveMode: !isRemoveMode, isRemoveRowMode: false });
+    set({ isRemoveMode: !isRemoveMode, isRemoveRowMode: false, isRemoveTypeMode: false, isRemoveColMode: false });
   },
 
   consumeRemoveBonus() {
@@ -323,7 +343,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleRemoveRowMode() {
     const { isRemoveRowMode, removeRowBonusCount } = get();
     if (!isRemoveRowMode && removeRowBonusCount === 0) return;
-    set({ isRemoveRowMode: !isRemoveRowMode, isRemoveMode: false });
+    set({ isRemoveRowMode: !isRemoveRowMode, isRemoveMode: false, isRemoveTypeMode: false, isRemoveColMode: false });
   },
 
   consumeRemoveRowBonus() {
@@ -332,6 +352,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   consumeShuffleBonus() {
     set({ shuffleBonusCount: Math.max(0, get().shuffleBonusCount - 1) });
+  },
+
+  toggleRemoveTypeMode() {
+    const { isRemoveTypeMode, removeTypeBonusCount } = get();
+    if (!isRemoveTypeMode && removeTypeBonusCount === 0) return;
+    set({ isRemoveTypeMode: !isRemoveTypeMode, isRemoveMode: false, isRemoveRowMode: false, isRemoveColMode: false });
+  },
+
+  consumeRemoveTypeBonus() {
+    set({ removeTypeBonusCount: Math.max(0, get().removeTypeBonusCount - 1), isRemoveTypeMode: false });
+  },
+
+  toggleRemoveColMode() {
+    const { isRemoveColMode, removeColBonusCount } = get();
+    if (!isRemoveColMode && removeColBonusCount === 0) return;
+    set({ isRemoveColMode: !isRemoveColMode, isRemoveMode: false, isRemoveRowMode: false, isRemoveTypeMode: false });
+  },
+
+  consumeRemoveColBonus() {
+    set({ removeColBonusCount: Math.max(0, get().removeColBonusCount - 1), isRemoveColMode: false });
   },
 
   // --- persistence ---
@@ -354,6 +394,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       removeBonusCount: get().removeBonusCount,
       removeRowBonusCount: get().removeRowBonusCount,
       shuffleBonusCount: get().shuffleBonusCount,
+      removeTypeBonusCount: get().removeTypeBonusCount,
+      removeColBonusCount: get().removeColBonusCount,
     };
     storage.set<PersistShape>(PERSIST_KEY, snapshot);
   },
@@ -391,6 +433,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       removeRowBonusCount: snap.removeRowBonusCount ?? 2,
       isRemoveRowMode: false,
       shuffleBonusCount: snap.shuffleBonusCount ?? 1,
+      removeTypeBonusCount: snap.removeTypeBonusCount ?? 2,
+      isRemoveTypeMode: false,
+      removeColBonusCount: snap.removeColBonusCount ?? 2,
+      isRemoveColMode: false,
     });
     return true;
   },

@@ -12,6 +12,7 @@
  * scoring stay in sync. No DOM access here — pure orchestration.
  */
 import { Level } from '@entities/board/lib/level';
+import { isColored } from '@entities/board/model/types';
 import { randomCellType } from '@entities/board/lib/cellType';
 import { TIMING } from '@shared/config/constants';
 import { sleep } from '@shared/lib/sleep';
@@ -77,6 +78,48 @@ export async function placeCellInColumn(column: number): Promise<void> {
 }
 
 /**
+ * Called when the player uses the "remove same type" bonus and taps a cell.
+ * Removes all colored cells sharing the same digit as the tapped cell.
+ */
+export async function removeCellsOfSameType(column: number, row: number): Promise<void> {
+  const store = useGameStore.getState();
+  if (store.isAnimating || store.isGameOver) return;
+
+  const cell = store.level.grid.get(column, row);
+  if (!cell || !isColored(cell.type)) return;
+
+  store.setAnimating(true);
+  store.consumeRemoveTypeBonus();
+
+  const removed = store.level.removeCellsOfType(cell.type);
+
+  store.setRemoving(new Set(removed.map((r) => r.cellId)));
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.3);
+
+  store.clearRemoving();
+  store.level.applyNeighbourEffectsForRemoved(removed);
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.7);
+
+  const moves = store.level.applyGravity();
+  store.applyGravityMoves(moves);
+  await sleep(TIMING.SHORT_MS);
+
+  if (store.level.isEmpty()) {
+    useGameStore.getState().addBonusScore(777);
+    useGameStore.getState().pushToast('clearBoard');
+  } else {
+    await runGameProcess();
+  }
+
+  useGameStore.getState().setAnimating(false);
+  useGameStore.getState().saveSnapshot();
+}
+
+/**
  * Called when the player uses the "shuffle" bonus.
  * Redistributes all colored cells randomly, then runs the match loop.
  */
@@ -93,6 +136,45 @@ export async function shuffleAllCells(): Promise<void> {
   await sleep(TIMING.SHORT_MS);
 
   await runGameProcess();
+
+  useGameStore.getState().setAnimating(false);
+  useGameStore.getState().saveSnapshot();
+}
+
+/**
+ * Called when the player uses the "remove column" bonus and taps a column.
+ */
+export async function removeColumnAtPosition(column: number): Promise<void> {
+  const store = useGameStore.getState();
+  if (store.isAnimating || store.isGameOver) return;
+
+  const removed = store.level.removeColumn(column);
+  if (removed.length === 0) return;
+
+  store.setAnimating(true);
+  store.consumeRemoveColBonus();
+
+  store.setRemoving(new Set(removed.map((r) => r.cellId)));
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.3);
+
+  store.clearRemoving();
+  store.level.applyNeighbourEffectsForRemoved(removed);
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.7);
+
+  const moves = store.level.applyGravity();
+  store.applyGravityMoves(moves);
+  await sleep(TIMING.SHORT_MS);
+
+  if (store.level.isEmpty()) {
+    useGameStore.getState().addBonusScore(777);
+    useGameStore.getState().pushToast('clearBoard');
+  } else {
+    await runGameProcess();
+  }
 
   useGameStore.getState().setAnimating(false);
   useGameStore.getState().saveSnapshot();

@@ -254,6 +254,21 @@ export class Level {
     }
   }
 
+  /** Removes all cells matching the given type and returns them as RemovedCell records. */
+  removeCellsOfType(type: CellType): RemovedCell[] {
+    const removed: RemovedCell[] = [];
+    for (let row = 0; row < BOARD.NUM_ROWS; row += 1) {
+      for (let column = 0; column < BOARD.NUM_COLUMNS; column += 1) {
+        const cell = this.grid.get(column, row);
+        if (cell && cell.type === type) {
+          removed.push({ cellId: cell.id, type: cell.type, row, column, scoreMultiplier: 1 });
+          this.grid.set(column, row, null);
+        }
+      }
+    }
+    return removed;
+  }
+
   /**
    * Randomly redistributes all colored cells across their current positions.
    * Obstacles (gray, black) are left in place. Types are shuffled via Fisher-Yates.
@@ -281,6 +296,19 @@ export class Level {
       const { column, row } = positions[i];
       this.grid.get(column, row)!.type = types[i];
     }
+  }
+
+  /** Removes all cells in the given column and returns them as RemovedCell records. */
+  removeColumn(column: number): RemovedCell[] {
+    const removed: RemovedCell[] = [];
+    for (let row = 0; row < BOARD.NUM_ROWS; row += 1) {
+      const cell = this.grid.get(column, row);
+      if (cell) {
+        removed.push({ cellId: cell.id, type: cell.type, row, column, scoreMultiplier: 1 });
+        this.grid.set(column, row, null);
+      }
+    }
+    return removed;
   }
 
   /** Removes all cells in the given row and returns them as RemovedCell records. */

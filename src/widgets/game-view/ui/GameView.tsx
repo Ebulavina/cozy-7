@@ -32,6 +32,12 @@ export function GameView({ onBack }: Props) {
   const isRemoveRowMode = useGameStore((s) => s.isRemoveRowMode);
   const toggleRemoveRowMode = useGameStore((s) => s.toggleRemoveRowMode);
   const shuffleBonusCount = useGameStore((s) => s.shuffleBonusCount);
+  const removeTypeBonusCount = useGameStore((s) => s.removeTypeBonusCount);
+  const isRemoveTypeMode = useGameStore((s) => s.isRemoveTypeMode);
+  const toggleRemoveTypeMode = useGameStore((s) => s.toggleRemoveTypeMode);
+  const removeColBonusCount = useGameStore((s) => s.removeColBonusCount);
+  const isRemoveColMode = useGameStore((s) => s.isRemoveColMode);
+  const toggleRemoveColMode = useGameStore((s) => s.toggleRemoveColMode);
   const { t } = useLocale();
   return (
     <main className={styles.view}>
@@ -40,6 +46,11 @@ export function GameView({ onBack }: Props) {
         <Board />
         <ScorePopups />
       </div>
+      <StepBar
+        value={stepsSinceShift}
+        total={stepsPerShift}
+        ariaLabel={t.movesAriaLabel}
+      />
       <div className={styles.bonusRow}>
         <Button
           variant="ghost"
@@ -61,6 +72,24 @@ export function GameView({ onBack }: Props) {
         </Button>
         <Button
           variant="ghost"
+          className={isRemoveTypeMode ? styles.bonusBtnActive : undefined}
+          onClick={toggleRemoveTypeMode}
+          disabled={removeTypeBonusCount === 0 || isAnimating || isGameOver}
+          aria-label={t.removeTypeBonusBtn}
+        >
+          # {removeTypeBonusCount}
+        </Button>
+        <Button
+          variant="ghost"
+          className={isRemoveColMode ? styles.bonusBtnActive : undefined}
+          onClick={toggleRemoveColMode}
+          disabled={removeColBonusCount === 0 || isAnimating || isGameOver}
+          aria-label={t.removeColBonusBtn}
+        >
+          ▮ {removeColBonusCount}
+        </Button>
+        <Button
+          variant="ghost"
           onClick={() => void shuffleAllCells()}
           disabled={shuffleBonusCount === 0 || isAnimating || isGameOver}
           aria-label={t.shuffleBonusBtn}
@@ -68,11 +97,6 @@ export function GameView({ onBack }: Props) {
           ⟳ {shuffleBonusCount}
         </Button>
       </div>
-      <StepBar
-        value={stepsSinceShift}
-        total={stepsPerShift}
-        ariaLabel={t.movesAriaLabel}
-      />
       <ToastBanner />
       {isGameOver ? <GameOverOverlay onBackToMenu={onBack} /> : null}
     </main>

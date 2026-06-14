@@ -32,6 +32,8 @@ const translations = {
     removeBonusBtn: 'Remove',
     removeRowBonusBtn: 'Remove row',
     shuffleBonusBtn: 'Shuffle',
+    removeTypeBonusBtn: 'Remove digit',
+    removeColBonusBtn: 'Remove column',
   },
   ru: {
     newGame: 'Новая игра',
@@ -60,6 +62,8 @@ const translations = {
     removeBonusBtn: 'Убрать',
     removeRowBonusBtn: 'Убрать строку',
     shuffleBonusBtn: 'Перемешать',
+    removeTypeBonusBtn: 'Убрать цифру',
+    removeColBonusBtn: 'Убрать столбец',
   },
 } satisfies Record<Locale, Record<string, string>>;
 

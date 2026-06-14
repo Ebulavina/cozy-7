@@ -7,7 +7,7 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import { BOARD } from '@shared/config/constants';
 import { useGameStore } from '@entities/game/model/gameStore';
-import { placeCellInColumn, removeCellAtPosition, removeRowAtPosition } from '@entities/game/lib/gameLoop';
+import { placeCellInColumn, removeCellAtPosition, removeCellsOfSameType, removeColumnAtPosition, removeRowAtPosition } from '@entities/game/lib/gameLoop';
 import { Cell } from './Cell';
 import styles from './Board.module.css';
 
@@ -19,6 +19,8 @@ export function Board() {
   const isGameOver = useGameStore((s) => s.isGameOver);
   const isRemoveMode = useGameStore((s) => s.isRemoveMode);
   const isRemoveRowMode = useGameStore((s) => s.isRemoveRowMode);
+  const isRemoveTypeMode = useGameStore((s) => s.isRemoveTypeMode);
+  const isRemoveColMode = useGameStore((s) => s.isRemoveColMode);
   const nextType = useGameStore((s) => s.nextType);
 
   // boardVersion subscription forces re-render after mutations on Level
@@ -67,6 +69,10 @@ export function Board() {
       void removeCellAtPosition(column, row);
     } else if (isRemoveRowMode) {
       void removeRowAtPosition(row);
+    } else if (isRemoveTypeMode) {
+      void removeCellsOfSameType(column, row);
+    } else if (isRemoveColMode) {
+      void removeColumnAtPosition(column);
     } else {
       void placeCellInColumn(column);
     }
@@ -92,7 +98,7 @@ export function Board() {
       <div
         className={styles.grid}
         onClick={handleGridClick}
-        style={{ cursor: isAnimating || isGameOver ? 'default' : isRemoveMode ? 'crosshair' : 'pointer' }}
+        style={{ cursor: isAnimating || isGameOver ? 'default' : (isRemoveMode || isRemoveRowMode || isRemoveTypeMode || isRemoveColMode) ? 'crosshair' : 'pointer' }}
       >
         {/* background grid lines */}
         {Array.from({ length: BOARD.NUM_COLUMNS * BOARD.NUM_ROWS - cells.length }).map((_, i) => (
