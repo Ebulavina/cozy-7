@@ -1,0 +1,68 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 7%;
+  border: none;
+  background: var(--btn-color, var(--surface));
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    transform var(--duration-short) var(--ease),
+    box-shadow var(--duration-short) var(--ease);
+}
+
+.btn:hover {
+  transform: scale(1.06);
+}
+
+.btn:active {
+  transform: scale(0.94);
+}
+
+.active {
+  box-shadow: 0 0 0 2.5px var(--text), var(--shadow-soft);
+  transform: scale(1.08);
+}
+
+.active:hover {
+  transform: scale(1.1);
+}
+
+.disabled {
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.icon {
+  font-size: 20px;
+  line-height: 1;
+  user-select: none;
+}
+
+.badge {
+  position: absolute;
+  bottom: -7px;
+  right: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(28, 27, 24, 0.15);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}

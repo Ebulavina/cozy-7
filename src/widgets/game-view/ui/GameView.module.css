@@ -24,10 +24,6 @@
 .bonusRow {
   display: flex;
   justify-content: center;
-  gap: 8px;
-}
-
-.bonusBtnActive {
-  color: var(--accent) !important;
-  border-color: var(--accent) !important;
+  gap: 16px;
+  padding-bottom: 10px;
 }
