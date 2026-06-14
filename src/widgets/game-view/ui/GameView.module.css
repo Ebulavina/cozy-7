@@ -20,3 +20,14 @@
   position: relative;
   width: 100%;
 }
+
+.bonusRow {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.bonusBtnActive {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}

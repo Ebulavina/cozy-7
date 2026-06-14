@@ -29,6 +29,9 @@ const translations = {
     statBestCombo: 'Max wave count',
     statBestComboScore: 'Best combo',
     close: 'Close',
+    removeBonusBtn: 'Remove',
+    removeRowBonusBtn: 'Remove row',
+    shuffleBonusBtn: 'Shuffle',
   },
   ru: {
     newGame: 'Новая игра',
@@ -54,6 +57,9 @@ const translations = {
     statBestCombo: 'Лучшее комбо',
     statBestComboScore: 'Лучший счёт за комбо',
     close: 'Закрыть',
+    removeBonusBtn: 'Убрать',
+    removeRowBonusBtn: 'Убрать строку',
+    shuffleBonusBtn: 'Перемешать',
   },
 } satisfies Record<Locale, Record<string, string>>;
 

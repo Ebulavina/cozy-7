@@ -7,7 +7,7 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import { BOARD } from '@shared/config/constants';
 import { useGameStore } from '@entities/game/model/gameStore';
-import { placeCellInColumn } from '@entities/game/lib/gameLoop';
+import { placeCellInColumn, removeCellAtPosition, removeRowAtPosition } from '@entities/game/lib/gameLoop';
 import { Cell } from './Cell';
 import styles from './Board.module.css';
 
@@ -17,6 +17,8 @@ export function Board() {
   const isShiftingUp = useGameStore((s) => s.isShiftingUp);
   const isAnimating = useGameStore((s) => s.isAnimating);
   const isGameOver = useGameStore((s) => s.isGameOver);
+  const isRemoveMode = useGameStore((s) => s.isRemoveMode);
+  const isRemoveRowMode = useGameStore((s) => s.isRemoveRowMode);
   const nextType = useGameStore((s) => s.nextType);
 
   // boardVersion subscription forces re-render after mutations on Level
@@ -52,12 +54,22 @@ export function Board() {
 
   const handleGridClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isAnimating || isGameOver) return;
-    const { left, width } = e.currentTarget.getBoundingClientRect();
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const column = Math.min(
       BOARD.NUM_COLUMNS - 1,
       Math.floor(((e.clientX - left) / width) * BOARD.NUM_COLUMNS),
     );
-    void placeCellInColumn(column);
+    const row = Math.max(0, Math.min(
+      BOARD.NUM_ROWS - 1,
+      BOARD.NUM_ROWS - 1 - Math.floor(((e.clientY - top) / height) * BOARD.NUM_ROWS),
+    ));
+    if (isRemoveMode) {
+      void removeCellAtPosition(column, row);
+    } else if (isRemoveRowMode) {
+      void removeRowAtPosition(row);
+    } else {
+      void placeCellInColumn(column);
+    }
   };
 
   return (
@@ -80,7 +92,7 @@ export function Board() {
       <div
         className={styles.grid}
         onClick={handleGridClick}
-        style={{ cursor: isAnimating || isGameOver ? 'default' : 'pointer' }}
+        style={{ cursor: isAnimating || isGameOver ? 'default' : isRemoveMode ? 'crosshair' : 'pointer' }}
       >
         {/* background grid lines */}
         {Array.from({ length: BOARD.NUM_COLUMNS * BOARD.NUM_ROWS - cells.length }).map((_, i) => (

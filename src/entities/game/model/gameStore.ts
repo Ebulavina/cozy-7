@@ -46,6 +46,9 @@ interface PersistShape {
   stepsSinceShift: number;
   shiftCount: number;
   isGameOver: boolean;
+  removeBonusCount: number;
+  removeRowBonusCount: number;
+  shuffleBonusCount: number;
 }
 
 export interface GameStore {
@@ -110,6 +113,19 @@ export interface GameStore {
   updateBestComboScore(score: number): void;
   resetCurrentComboScore(): void;
 
+  removeBonusCount: number;
+  isRemoveMode: boolean;
+  toggleRemoveMode(): void;
+  consumeRemoveBonus(): void;
+
+  removeRowBonusCount: number;
+  isRemoveRowMode: boolean;
+  toggleRemoveRowMode(): void;
+  consumeRemoveRowBonus(): void;
+
+  shuffleBonusCount: number;
+  consumeShuffleBonus(): void;
+
   // persistence
   saveSnapshot(): void;
   restoreSnapshot(): boolean;
@@ -135,6 +151,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toasts: [],
   isAnimating: false,
   boardVersion: 0,
+  removeBonusCount: 3,
+  isRemoveMode: false,
+  removeRowBonusCount: 2,
+  isRemoveRowMode: false,
+  shuffleBonusCount: 1,
 
   newGame() {
     set({
@@ -151,6 +172,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       toasts: [],
       isAnimating: false,
       boardVersion: get().boardVersion + 1,
+      removeBonusCount: 3,
+      isRemoveMode: false,
+      removeRowBonusCount: 2,
+      isRemoveRowMode: false,
+      shuffleBonusCount: 1,
     });
     storage.remove(PERSIST_KEY);
   },
@@ -284,6 +310,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ boardVersion: get().boardVersion + 1 });
   },
 
+  toggleRemoveMode() {
+    const { isRemoveMode, removeBonusCount } = get();
+    if (!isRemoveMode && removeBonusCount === 0) return;
+    set({ isRemoveMode: !isRemoveMode, isRemoveRowMode: false });
+  },
+
+  consumeRemoveBonus() {
+    set({ removeBonusCount: Math.max(0, get().removeBonusCount - 1), isRemoveMode: false });
+  },
+
+  toggleRemoveRowMode() {
+    const { isRemoveRowMode, removeRowBonusCount } = get();
+    if (!isRemoveRowMode && removeRowBonusCount === 0) return;
+    set({ isRemoveRowMode: !isRemoveRowMode, isRemoveMode: false });
+  },
+
+  consumeRemoveRowBonus() {
+    set({ removeRowBonusCount: Math.max(0, get().removeRowBonusCount - 1), isRemoveRowMode: false });
+  },
+
+  consumeShuffleBonus() {
+    set({ shuffleBonusCount: Math.max(0, get().shuffleBonusCount - 1) });
+  },
+
   // --- persistence ---
   saveSnapshot() {
     const { level, score, nextType, stepsSinceShift, shiftCount, isGameOver } = get();
@@ -301,6 +351,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
       stepsSinceShift,
       shiftCount,
       isGameOver,
+      removeBonusCount: get().removeBonusCount,
+      removeRowBonusCount: get().removeRowBonusCount,
+      shuffleBonusCount: get().shuffleBonusCount,
     };
     storage.set<PersistShape>(PERSIST_KEY, snapshot);
   },
@@ -333,6 +386,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       popups: [],
       isAnimating: false,
       boardVersion: get().boardVersion + 1,
+      removeBonusCount: snap.removeBonusCount ?? 3,
+      isRemoveMode: false,
+      removeRowBonusCount: snap.removeRowBonusCount ?? 2,
+      isRemoveRowMode: false,
+      shuffleBonusCount: snap.shuffleBonusCount ?? 1,
     });
     return true;
   },

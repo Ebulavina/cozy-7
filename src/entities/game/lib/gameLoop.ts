@@ -77,6 +77,108 @@ export async function placeCellInColumn(column: number): Promise<void> {
 }
 
 /**
+ * Called when the player uses the "shuffle" bonus.
+ * Redistributes all colored cells randomly, then runs the match loop.
+ */
+export async function shuffleAllCells(): Promise<void> {
+  const store = useGameStore.getState();
+  if (store.isAnimating || store.isGameOver) return;
+
+  store.setAnimating(true);
+  store.consumeShuffleBonus();
+
+  store.level.shuffleCells();
+  store.syncFromLevel();
+
+  await sleep(TIMING.SHORT_MS);
+
+  await runGameProcess();
+
+  useGameStore.getState().setAnimating(false);
+  useGameStore.getState().saveSnapshot();
+}
+
+/**
+ * Called when the player uses the "remove row" bonus and taps a row.
+ */
+export async function removeRowAtPosition(row: number): Promise<void> {
+  const store = useGameStore.getState();
+  if (store.isAnimating || store.isGameOver) return;
+
+  const removed = store.level.removeRow(row);
+  if (removed.length === 0) return;
+
+  store.setAnimating(true);
+  store.consumeRemoveRowBonus();
+
+  store.setRemoving(new Set(removed.map((r) => r.cellId)));
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.3);
+
+  store.clearRemoving();
+  store.level.applyNeighbourEffectsForRemoved(removed);
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.7);
+
+  const moves = store.level.applyGravity();
+  store.applyGravityMoves(moves);
+  await sleep(TIMING.SHORT_MS);
+
+  if (store.level.isEmpty()) {
+    useGameStore.getState().addBonusScore(777);
+    useGameStore.getState().pushToast('clearBoard');
+  } else {
+    await runGameProcess();
+  }
+
+  useGameStore.getState().setAnimating(false);
+  useGameStore.getState().saveSnapshot();
+}
+
+/**
+ * Called when the player uses the "remove one element" bonus and taps a cell.
+ * Removes the cell, applies neighbour effects, gravity, then runs the match loop.
+ */
+export async function removeCellAtPosition(column: number, row: number): Promise<void> {
+  const store = useGameStore.getState();
+  if (store.isAnimating || store.isGameOver) return;
+
+  const cell = store.level.grid.get(column, row);
+  if (!cell) return;
+
+  store.setAnimating(true);
+  store.consumeRemoveBonus();
+
+  store.level.removeCell(column, row);
+  store.setRemoving(new Set([cell.id]));
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.3);
+
+  store.clearRemoving();
+  store.level.applyNeighbourEffectsForRemoved([{ cellId: cell.id, type: cell.type, row, column, scoreMultiplier: 1 }]);
+  store.syncFromLevel();
+
+  await sleep(TIMING.LONG_MS * 0.7);
+
+  const moves = store.level.applyGravity();
+  store.applyGravityMoves(moves);
+  await sleep(TIMING.SHORT_MS);
+
+  if (store.level.isEmpty()) {
+    useGameStore.getState().addBonusScore(777);
+    useGameStore.getState().pushToast('clearBoard');
+  } else {
+    await runGameProcess();
+  }
+
+  useGameStore.getState().setAnimating(false);
+  useGameStore.getState().saveSnapshot();
+}
+
+/**
  * Port of `startGameProcess`. Recursively (here: iteratively) clears matches
  * until none remain, applying gravity between passes and growing the
  * iteration multiplier on each non-empty pass.

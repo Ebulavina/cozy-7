@@ -254,6 +254,55 @@ export class Level {
     }
   }
 
+  /**
+   * Randomly redistributes all colored cells across their current positions.
+   * Obstacles (gray, black) are left in place. Types are shuffled via Fisher-Yates.
+   */
+  shuffleCells(): void {
+    const positions: { column: number; row: number }[] = [];
+    const types: import('../model/types').CellType[] = [];
+
+    for (let row = 0; row < BOARD.NUM_ROWS; row += 1) {
+      for (let column = 0; column < BOARD.NUM_COLUMNS; column += 1) {
+        const cell = this.grid.get(column, row);
+        if (cell && isColored(cell.type)) {
+          positions.push({ column, row });
+          types.push(cell.type);
+        }
+      }
+    }
+
+    for (let i = types.length - 1; i > 0; i -= 1) {
+      const j = this.rng.nextInt(0, i);
+      [types[i], types[j]] = [types[j], types[i]];
+    }
+
+    for (let i = 0; i < positions.length; i += 1) {
+      const { column, row } = positions[i];
+      this.grid.get(column, row)!.type = types[i];
+    }
+  }
+
+  /** Removes all cells in the given row and returns them as RemovedCell records. */
+  removeRow(row: number): RemovedCell[] {
+    const removed: RemovedCell[] = [];
+    for (let column = 0; column < BOARD.NUM_COLUMNS; column += 1) {
+      const cell = this.grid.get(column, row);
+      if (cell) {
+        removed.push({ cellId: cell.id, type: cell.type, row, column, scoreMultiplier: 1 });
+        this.grid.set(column, row, null);
+      }
+    }
+    return removed;
+  }
+
+  /** Removes the cell at (column, row) and returns it, or null if the slot was empty. */
+  removeCell(column: number, row: number): Cell | null {
+    const cell = this.grid.get(column, row);
+    if (cell) this.grid.set(column, row, null);
+    return cell;
+  }
+
   /** Reset to empty board. */
   clean(): void {
     this.grid = new Grid();
