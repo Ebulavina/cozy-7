@@ -4,8 +4,8 @@
 }
 
 .btn {
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   border-radius: 7%;
   border: none;
   background: var(--btn-color, var(--surface));
@@ -15,12 +15,11 @@
   justify-content: center;
   cursor: pointer;
   transition:
-    transform var(--duration-short) var(--ease),
-    box-shadow var(--duration-short) var(--ease);
+    transform var(--duration-short) var(--ease);
 }
 
 .btn:hover {
-  transform: scale(1.06);
+  transform: scale(1.1);
 }
 
 .btn:active {
@@ -28,8 +27,7 @@
 }
 
 .active {
-  box-shadow: 0 0 0 2.5px var(--text), var(--shadow-soft);
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
 .active:hover {
@@ -37,7 +35,6 @@
 }
 
 .disabled {
-  opacity: 0.38;
   pointer-events: none;
 }
 
