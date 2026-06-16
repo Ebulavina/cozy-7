@@ -21,13 +21,12 @@
   background: transparent;
   border: 1px dashed var(--border);
   border-radius: 10%;
-  opacity: 0.35;
 }
 
 .nextRow {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .nextBlock {
