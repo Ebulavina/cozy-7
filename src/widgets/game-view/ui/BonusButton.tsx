@@ -1,8 +1,8 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import styles from './BonusButton.module.css';
 
 interface Props {
-  icon: string;
+  icon: ReactNode;
   count: number;
   color: string;
   active?: boolean;

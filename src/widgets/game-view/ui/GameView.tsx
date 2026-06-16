@@ -9,6 +9,7 @@ import { useLocale } from '@shared/lib/useLocale';
 import { shuffleAllCells } from '@entities/game/lib/gameLoop';
 import { Board } from './Board';
 import { BonusButton } from './BonusButton';
+import { RemoveCellIcon, RemoveRowIcon, RemoveColIcon, RemoveTypeIcon, ShuffleIcon } from './BonusIcons';
 import { Hud } from './Hud';
 import { GameOverOverlay } from './GameOverOverlay';
 import { ScorePopups } from './ScorePopups';
@@ -52,11 +53,11 @@ export function GameView({ onBack }: Props) {
         ariaLabel={t.movesAriaLabel}
       />
       <div className={styles.bonusRow}>
-        <BonusButton icon="✂" count={removeBonusCount} color="var(--cell-1)" active={isRemoveMode} disabled={removeBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveMode} aria-label={t.removeBonusBtn} />
-        <BonusButton icon="━" count={removeRowBonusCount} color="var(--cell-3)" active={isRemoveRowMode} disabled={removeRowBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveRowMode} aria-label={t.removeRowBonusBtn} />
-        <BonusButton icon="┃" count={removeColBonusCount} color="var(--cell-2)" active={isRemoveColMode} disabled={removeColBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveColMode} aria-label={t.removeColBonusBtn} />
-        <BonusButton icon="#" count={removeTypeBonusCount} color="var(--cell-4)" active={isRemoveTypeMode} disabled={removeTypeBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveTypeMode} aria-label={t.removeTypeBonusBtn} />
-        <BonusButton icon="⟳" count={shuffleBonusCount} color="var(--cell-7)" disabled={shuffleBonusCount === 0 || isAnimating || isGameOver} onClick={() => void shuffleAllCells()} aria-label={t.shuffleBonusBtn} />
+        <BonusButton icon={<RemoveCellIcon />} count={removeBonusCount} color="var(--cell-1)" active={isRemoveMode} disabled={removeBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveMode} aria-label={t.removeBonusBtn} />
+        <BonusButton icon={<RemoveRowIcon />} count={removeRowBonusCount} color="var(--cell-3)" active={isRemoveRowMode} disabled={removeRowBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveRowMode} aria-label={t.removeRowBonusBtn} />
+        <BonusButton icon={<RemoveColIcon />} count={removeColBonusCount} color="var(--cell-2)" active={isRemoveColMode} disabled={removeColBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveColMode} aria-label={t.removeColBonusBtn} />
+        <BonusButton icon={<RemoveTypeIcon />} count={removeTypeBonusCount} color="var(--cell-4)" active={isRemoveTypeMode} disabled={removeTypeBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveTypeMode} aria-label={t.removeTypeBonusBtn} />
+        <BonusButton icon={<ShuffleIcon />} count={shuffleBonusCount} color="var(--cell-7)" disabled={shuffleBonusCount === 0 || isAnimating || isGameOver} onClick={() => void shuffleAllCells()} aria-label={t.shuffleBonusBtn} />
       </div>
       <ToastBanner />
       {isGameOver ? <GameOverOverlay onBackToMenu={onBack} /> : null}
