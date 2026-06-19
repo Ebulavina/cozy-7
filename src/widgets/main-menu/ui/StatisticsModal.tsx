@@ -15,7 +15,7 @@ export function StatisticsModal({ onClose }: Props) {
   const { t, formatNumber } = useLocale();
 
   return (
-    <Modal aria-label={t.statistics}>
+    <Modal aria-label={t.statistics} onClose={onClose}>
       <span className={styles.title}>{t.statistics}</span>
       <div className={styles.rows}>
         <div className={styles.row}>

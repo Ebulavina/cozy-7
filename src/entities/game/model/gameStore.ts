@@ -126,6 +126,8 @@ export interface GameStore {
   consumeRemoveRowBonus(): void;
 
   shuffleBonusCount: number;
+  isShuffleMode: boolean;
+  toggleShuffleMode(): void;
   consumeShuffleBonus(): void;
 
   removeTypeBonusCount: number;
@@ -168,6 +170,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   removeRowBonusCount: 2,
   isRemoveRowMode: false,
   shuffleBonusCount: 1,
+  isShuffleMode: false,
   removeTypeBonusCount: 2,
   isRemoveTypeMode: false,
   removeColBonusCount: 2,
@@ -193,6 +196,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       removeRowBonusCount: 2,
       isRemoveRowMode: false,
       shuffleBonusCount: 1,
+      isShuffleMode: false,
       removeTypeBonusCount: 2,
       isRemoveTypeMode: false,
       removeColBonusCount: 2,
@@ -333,7 +337,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleRemoveMode() {
     const { isRemoveMode, removeBonusCount } = get();
     if (!isRemoveMode && removeBonusCount === 0) return;
-    set({ isRemoveMode: !isRemoveMode, isRemoveRowMode: false, isRemoveTypeMode: false, isRemoveColMode: false });
+    set({ isRemoveMode: !isRemoveMode, isRemoveRowMode: false, isRemoveTypeMode: false, isRemoveColMode: false, isShuffleMode: false });
   },
 
   consumeRemoveBonus() {
@@ -343,21 +347,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleRemoveRowMode() {
     const { isRemoveRowMode, removeRowBonusCount } = get();
     if (!isRemoveRowMode && removeRowBonusCount === 0) return;
-    set({ isRemoveRowMode: !isRemoveRowMode, isRemoveMode: false, isRemoveTypeMode: false, isRemoveColMode: false });
+    set({ isRemoveRowMode: !isRemoveRowMode, isRemoveMode: false, isRemoveTypeMode: false, isRemoveColMode: false, isShuffleMode: false });
   },
 
   consumeRemoveRowBonus() {
     set({ removeRowBonusCount: Math.max(0, get().removeRowBonusCount - 1), isRemoveRowMode: false });
   },
 
+  toggleShuffleMode() {
+    const { isShuffleMode, shuffleBonusCount } = get();
+    if (!isShuffleMode && shuffleBonusCount === 0) return;
+    set({ isShuffleMode: !isShuffleMode, isRemoveMode: false, isRemoveRowMode: false, isRemoveTypeMode: false, isRemoveColMode: false });
+  },
+
   consumeShuffleBonus() {
-    set({ shuffleBonusCount: Math.max(0, get().shuffleBonusCount - 1) });
+    set({ shuffleBonusCount: Math.max(0, get().shuffleBonusCount - 1), isShuffleMode: false });
   },
 
   toggleRemoveTypeMode() {
     const { isRemoveTypeMode, removeTypeBonusCount } = get();
     if (!isRemoveTypeMode && removeTypeBonusCount === 0) return;
-    set({ isRemoveTypeMode: !isRemoveTypeMode, isRemoveMode: false, isRemoveRowMode: false, isRemoveColMode: false });
+    set({ isRemoveTypeMode: !isRemoveTypeMode, isRemoveMode: false, isRemoveRowMode: false, isRemoveColMode: false, isShuffleMode: false });
   },
 
   consumeRemoveTypeBonus() {
@@ -367,7 +377,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleRemoveColMode() {
     const { isRemoveColMode, removeColBonusCount } = get();
     if (!isRemoveColMode && removeColBonusCount === 0) return;
-    set({ isRemoveColMode: !isRemoveColMode, isRemoveMode: false, isRemoveRowMode: false, isRemoveTypeMode: false });
+    set({ isRemoveColMode: !isRemoveColMode, isRemoveMode: false, isRemoveRowMode: false, isRemoveTypeMode: false, isShuffleMode: false });
   },
 
   consumeRemoveColBonus() {
@@ -433,6 +443,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       removeRowBonusCount: snap.removeRowBonusCount ?? 2,
       isRemoveRowMode: false,
       shuffleBonusCount: snap.shuffleBonusCount ?? 1,
+      isShuffleMode: false,
       removeTypeBonusCount: snap.removeTypeBonusCount ?? 2,
       isRemoveTypeMode: false,
       removeColBonusCount: snap.removeColBonusCount ?? 2,

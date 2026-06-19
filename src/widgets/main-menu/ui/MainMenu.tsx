@@ -6,11 +6,11 @@
  */
 import { useState } from 'react';
 import { useGameStore } from '@entities/game/model/gameStore';
-import { useTheme } from '@shared/lib/useTheme';
 import { useLocale } from '@shared/lib/useLocale';
 import { Button } from '@shared/ui/Button/Button';
 import { storage } from '@shared/lib/storage';
 import { StatisticsModal } from './StatisticsModal';
+import { SettingsModal } from './SettingsModal';
 import styles from './MainMenu.module.css';
 
 interface Props {
@@ -22,9 +22,9 @@ const HAS_SAVE_KEY = 'gameState';
 export function MainMenu({ onStart }: Props) {
   const restore = useGameStore((s) => s.restoreSnapshot);
   const newGame = useGameStore((s) => s.newGame);
-  const { theme, toggle } = useTheme();
-  const { t, toggleLocale } = useLocale();
+  const { t } = useLocale();
   const [showStats, setShowStats] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const hasSave = storage.get(HAS_SAVE_KEY) != null;
 
@@ -53,13 +53,10 @@ export function MainMenu({ onStart }: Props) {
       </div>
 
       <footer className={styles.footer}>
-        <Button className={styles.buttonTheme} variant="ghost" onClick={toggle}>
-          {t.toggleTheme}
-          <span>{theme === 'dark' ? '☀' : '☾'}</span>
-        </Button>
-        <Button variant="ghost" onClick={toggleLocale}>{t.toggleLocale}</Button>
+        <Button variant="ghost" onClick={() => setShowSettings(true)}>{t.settings}</Button>
       </footer>
       {showStats && <StatisticsModal onClose={() => setShowStats(false)} />}
+      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </main>
   );
 }

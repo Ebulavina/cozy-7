@@ -7,6 +7,7 @@
   margin: 0 auto;
   width: 100%;
   min-height: 100%;
+  gap: 16px;
 }
 
 .topNav {
@@ -20,8 +21,33 @@
   width: 100%;
 }
 
+.shuffleOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: crosshair;
+}
+
 .bonusRow {
   display: flex;
   justify-content: center;
   gap: 16px;
+}
+
+.bonusHint {
+  min-height: 20px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding-bottom: 16px;
+}
+
+.bonusHint span {
+  animation: hintFade var(--duration-short) var(--ease);
+}
+
+@keyframes hintFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
