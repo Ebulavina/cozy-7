@@ -44,32 +44,31 @@ export function GameView({ onBack }: Props) {
   const { t } = useLocale();
   return (
     <main className={styles.view}>
-      <Hud onBack={onBack} />
-      <div className={styles.boardArea}>
-        <Board />
-        <ScorePopups />
-        {isShuffleMode && (
-          <div className={styles.shuffleOverlay} onClick={() => void shuffleAllCells()} />
-        )}
-      </div>
-      <StepBar
-        value={stepsSinceShift}
-        total={stepsPerShift}
-        ariaLabel={t.movesAriaLabel}
-      />
-      <div className={styles.bonusRow}>
-        <BonusButton icon={<RemoveCellIcon />} count={removeBonusCount} color="var(--cell-1)" active={isRemoveMode} disabled={removeBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveMode} aria-label={t.removeBonusBtn} />
-        <BonusButton icon={<RemoveRowIcon />} count={removeRowBonusCount} color="var(--cell-3)" active={isRemoveRowMode} disabled={removeRowBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveRowMode} aria-label={t.removeRowBonusBtn} />
-        <BonusButton icon={<RemoveColIcon />} count={removeColBonusCount} color="var(--cell-2)" active={isRemoveColMode} disabled={removeColBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveColMode} aria-label={t.removeColBonusBtn} />
-        <BonusButton icon={<RemoveTypeIcon />} count={removeTypeBonusCount} color="var(--cell-4)" active={isRemoveTypeMode} disabled={removeTypeBonusCount === 0 || isAnimating || isGameOver} onClick={toggleRemoveTypeMode} aria-label={t.removeTypeBonusBtn} />
-        <BonusButton icon={<ShuffleIcon />} count={shuffleBonusCount} color="var(--cell-7)" active={isShuffleMode} disabled={shuffleBonusCount === 0 || isAnimating || isGameOver} onClick={toggleShuffleMode} aria-label={t.shuffleBonusBtn} />
-      </div>
-      <div className={styles.bonusHint} aria-live="polite">
-        {isRemoveMode && <span key="remove">{t.hintRemove}</span>}
-        {isRemoveRowMode && <span key="row">{t.hintRemoveRow}</span>}
-        {isRemoveColMode && <span key="col">{t.hintRemoveCol}</span>}
-        {isRemoveTypeMode && <span key="type">{t.hintRemoveType}</span>}
-        {isShuffleMode && <span key="shuffle">{t.hintShuffle}</span>}
+      <div className={styles.gameLayout}>
+        <div className={styles.boardColumn}>
+          <Hud onBack={onBack} />
+          <div className={styles.boardArea}>
+            <Board />
+            <ScorePopups />
+            {isShuffleMode && (
+              <div className={styles.shuffleOverlay} onClick={() => void shuffleAllCells()} />
+            )}
+          </div>
+          <StepBar
+            value={stepsSinceShift}
+            total={stepsPerShift}
+            ariaLabel={t.movesAriaLabel}
+          />
+        </div>
+        <div className={styles.bonusSide}>
+          <div className={styles.bonusRow}>
+            <BonusButton icon={<RemoveCellIcon />} count={removeBonusCount} color="var(--cell-1)" active={isRemoveMode} disabled={removeBonusCount === 0 || isAnimating || isGameOver} hint={t.hintRemove} onClick={toggleRemoveMode} aria-label={t.removeBonusBtn} />
+            <BonusButton icon={<RemoveRowIcon />} count={removeRowBonusCount} color="var(--cell-3)" active={isRemoveRowMode} disabled={removeRowBonusCount === 0 || isAnimating || isGameOver} hint={t.hintRemoveRow} onClick={toggleRemoveRowMode} aria-label={t.removeRowBonusBtn} />
+            <BonusButton icon={<RemoveColIcon />} count={removeColBonusCount} color="var(--cell-2)" active={isRemoveColMode} disabled={removeColBonusCount === 0 || isAnimating || isGameOver} hint={t.hintRemoveCol} onClick={toggleRemoveColMode} aria-label={t.removeColBonusBtn} />
+            <BonusButton icon={<RemoveTypeIcon />} count={removeTypeBonusCount} color="var(--cell-4)" active={isRemoveTypeMode} disabled={removeTypeBonusCount === 0 || isAnimating || isGameOver} hint={t.hintRemoveType} onClick={toggleRemoveTypeMode} aria-label={t.removeTypeBonusBtn} />
+            <BonusButton icon={<ShuffleIcon />} count={shuffleBonusCount} color="var(--cell-7)" active={isShuffleMode} disabled={shuffleBonusCount === 0 || isAnimating || isGameOver} hint={t.hintShuffle} onClick={toggleShuffleMode} aria-label={t.shuffleBonusBtn} />
+          </div>
+        </div>
       </div>
       <ToastBanner />
       {isGameOver ? <GameOverOverlay onBackToMenu={onBack} /> : null}

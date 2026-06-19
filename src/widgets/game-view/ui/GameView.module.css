@@ -1,19 +1,24 @@
 .view {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   padding: 24px 20px 0;
   max-width: 520px;
   margin: 0 auto;
   width: 100%;
   min-height: 100%;
+}
+
+.gameLayout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   gap: 16px;
 }
 
-.topNav {
+.boardColumn {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .boardArea {
@@ -28,26 +33,54 @@
   cursor: crosshair;
 }
 
+.bonusSide {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
 .bonusRow {
   display: flex;
   justify-content: center;
   gap: 16px;
 }
 
-.bonusHint {
-  min-height: 20px;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-  padding-bottom: 16px;
-}
 
-.bonusHint span {
-  animation: hintFade var(--duration-short) var(--ease);
-}
+/* Desktop: bonuses float to the right of the centered board */
+@media (min-width: 680px) {
+  .view {
+    max-width: 800px;
+  }
 
-@keyframes hintFade {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  .gameLayout {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* Transparent left spacer mirrors the bonus sidebar to keep board centered */
+  .gameLayout::before {
+    content: '';
+    flex: 0 0 72px;
+  }
+
+  .boardColumn {
+    flex: 0 1 480px;
+    min-width: 0;
+  }
+
+  .bonusSide {
+    flex: 0 0 72px;
+    align-self: center;
+    align-items: center;
+    padding-left: 16px;
+    overflow: visible;
+  }
+
+  .bonusRow {
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
 }

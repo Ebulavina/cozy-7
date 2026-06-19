@@ -7,11 +7,12 @@ interface Props {
   color: string;
   active?: boolean;
   disabled?: boolean;
+  hint?: string;
   onClick: () => void;
   'aria-label': string;
 }
 
-export function BonusButton({ icon, count, color, active, disabled, onClick, 'aria-label': label }: Props) {
+export function BonusButton({ icon, count, color, active, disabled, hint, onClick, 'aria-label': label }: Props) {
   return (
     <div className={`${styles.wrap} ${disabled ? styles.disabled : ''}`}>
       <button
@@ -25,6 +26,9 @@ export function BonusButton({ icon, count, color, active, disabled, onClick, 'ar
         <span className={styles.icon}>{icon}</span>
       </button>
       <span className={styles.badge}>{count}</span>
+      {active && hint && (
+        <div className={styles.tooltip} role="tooltip">{hint}</div>
+      )}
     </div>
   );
 }

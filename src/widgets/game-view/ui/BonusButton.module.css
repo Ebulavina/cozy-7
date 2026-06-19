@@ -49,6 +49,87 @@
   height: 100%;
 }
 
+/* Tooltip — appears above on mobile, to the left on desktop */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  pointer-events: none;
+  z-index: 20;
+  animation: tipUp var(--duration-short) var(--ease);
+}
+
+/* Arrow pointing down toward the button */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--border);
+}
+
+.tooltip::before {
+  content: '';
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--surface);
+  z-index: 1;
+}
+
+@keyframes tipUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@media (min-width: 680px) {
+  .tooltip {
+    bottom: auto;
+    left: auto;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    animation: tipLeft var(--duration-short) var(--ease);
+  }
+
+  /* Arrow pointing right toward the button */
+  .tooltip::after {
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: var(--border);
+  }
+
+  .tooltip::before {
+    top: 50%;
+    left: calc(100% - 1px);
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-left-color: var(--surface);
+    z-index: 1;
+  }
+}
+
+@keyframes tipLeft {
+  from { opacity: 0; transform: translateY(-50%) translateX(6px); }
+  to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
 .badge {
   position: absolute;
   bottom: -7px;
