@@ -16,6 +16,7 @@ import { isColored } from '@entities/board/model/types';
 import { randomCellType } from '@entities/board/lib/cellType';
 import { TIMING } from '@shared/config/constants';
 import { sleep } from '@shared/lib/sleep';
+import { storage } from '@shared/lib/storage';
 import { useGameStore } from '../model/gameStore';
 
 /**
@@ -281,6 +282,15 @@ async function runGameProcess(
     }
 
     iterations += 1;
+
+    if (iterations === 1 && startIterations === 0) {
+      const FIRST_MATCH_KEY = 'tutorialFirstMatchSeen';
+      if (storage.get(FIRST_MATCH_KEY) == null) {
+        storage.set(FIRST_MATCH_KEY, true);
+        store.pushToast('tutorialFirstMatch');
+      }
+    }
+
     store.applyMatchSideEffects(removed, iterationMultiplier);
 
     // Mark sprites as removing → CSS plays the explode animation for LONG_MS.

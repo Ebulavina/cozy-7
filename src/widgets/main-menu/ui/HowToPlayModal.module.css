@@ -1,0 +1,30 @@
+.title {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
+  text-align: center;
+}
+
+.actions {
+  width: 100%;
+  margin-top: 16px;
+  text-align: center;
+}

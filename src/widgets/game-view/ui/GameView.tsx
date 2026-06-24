@@ -4,8 +4,10 @@
  * Stacks the HUD over the Board and lets popups float upward over the grid.
  * GameOverOverlay appears when isGameOver flips true (Store.isGameOver).
  */
+import { useEffect } from 'react';
 import { useGameStore } from '@entities/game/model/gameStore';
 import { useLocale } from '@shared/lib/useLocale';
+import { storage } from '@shared/lib/storage';
 import { shuffleAllCells } from '@entities/game/lib/gameLoop';
 import { Board } from './Board';
 import { BonusButton } from './BonusButton';
@@ -41,7 +43,19 @@ export function GameView({ onBack }: Props) {
   const removeColBonusCount = useGameStore((s) => s.removeColBonusCount);
   const isRemoveColMode = useGameStore((s) => s.isRemoveColMode);
   const toggleRemoveColMode = useGameStore((s) => s.toggleRemoveColMode);
+  const score = useGameStore((s) => s.score);
+  const pushToast = useGameStore((s) => s.pushToast);
   const { t } = useLocale();
+
+  useEffect(() => {
+    const KEY = 'tutorialFirstMoveSeen';
+    if (score === 0 && storage.get(KEY) == null) {
+      storage.set(KEY, true);
+      pushToast('tutorialFirstMove');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <main className={styles.view}>
       <div className={styles.gameLayout}>

@@ -25,7 +25,8 @@ import { storage } from '@shared/lib/storage';
 import { uid } from '@shared/lib/uid';
 
 export type ToastVariant = 'info';
-export type ToastKey = 'newLine' | 'clearBoard' | 'newComboRecord' | 'comboScore';
+export type ToastKey = 'newLine' | 'clearBoard' | 'newComboRecord' | 'comboScore'
+  | 'tutorialFirstMove' | 'tutorialFirstMatch';
 
 export interface Toast {
   id: string;
