@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { create } from 'zustand';
 
 type Locale = 'en' | 'ru';
 
@@ -109,25 +110,28 @@ const translations = {
   },
 } satisfies Record<Locale, Record<string, string>>;
 
+interface LocaleStore {
+  locale: Locale;
+  toggleLocale: () => void;
+}
+
+const useLocaleStore = create<LocaleStore>((set) => ({
+  locale: (localStorage.getItem(KEY) as Locale | null) ?? 'en',
+  toggleLocale: () => set((s) => {
+    const next = s.locale === 'en' ? 'ru' : 'en';
+    localStorage.setItem(KEY, next);
+    return { locale: next };
+  }),
+}));
+
+const fmt = new Intl.NumberFormat('ru-RU');
+const formatNumber = (n: number) => fmt.format(n);
+
 export function useLocale() {
-  const [locale, setLocale] = useState<Locale>(
-    () => (localStorage.getItem(KEY) as Locale | null) ?? 'en',
-  );
+  const locale = useLocaleStore((s) => s.locale);
+  const toggleLocale = useLocaleStore((s) => s.toggleLocale);
 
-  const toggleLocale = useCallback(() => {
-    setLocale((l) => {
-      const next = l === 'en' ? 'ru' : 'en';
-      localStorage.setItem(KEY, next);
-      return next;
-    });
-  }, []);
+  const t = useMemo(() => translations[locale], [locale]);
 
-  const fmt = useMemo(
-    () => new Intl.NumberFormat('ru-RU'),
-    [],
-  );
-
-  const formatNumber = useCallback((n: number) => fmt.format(n), [fmt]);
-
-  return { t: translations[locale], locale, toggleLocale, formatNumber };
+  return { t, locale, toggleLocale, formatNumber };
 }
