@@ -27,7 +27,7 @@ export function MainMenu({ onStart }: Props) {
   const { t } = useLocale();
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [showHowToPlay, setShowHowToPlay] = useState(() => storage.get(TUTORIAL_SEEN_KEY) == null && !hasSave);
+  const [showHowToPlay, setShowHowToPlay] = useState(() => storage.get(TUTORIAL_SEEN_KEY) == null && storage.get(HAS_SAVE_KEY) != null);
 
   const hasSave = storage.get(HAS_SAVE_KEY) != null;
 
